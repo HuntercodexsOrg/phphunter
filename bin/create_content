@@ -1,0 +1,287 @@
+#!/bin/bash
+
+################################################################################
+# Author: Jereelton Teixeira
+################################################################################
+
+ARG1="$1" #Command
+ARG2="$2" #Resource
+ARG3="$3" #Content Name
+ARG4="$4" #Database Create true|false
+ARG5="$5" #Contents content1:content2:content3...
+ARG6="$6" #Main Dir
+
+if [[ ! $ARG1 =~ ':' ]]; then
+    echo "ERROR: Invalid argument to create CONTENT: ${ARG1} !"
+    exit
+fi
+
+if [[ ! $ARG2 =~ '/' ]]; then
+    echo "ERROR: Invalid argument to create CONTENT: [${ARG2}] !"
+    exit
+fi
+
+if [[ ! $ARG3 =~ '-' ]]; then
+    echo "ERROR: Invalid argument to create CONTENT: [${ARG3}] !"
+    exit
+fi
+
+if [[ ! $ARG4 =~ ':' ]]; then
+    echo "ERROR: Invalid argument to create CONTENT: [${ARG4}] !"
+    exit
+fi
+
+if [[ $ARG5 == '' ]]; then
+    echo "ERROR: Invalid argument to create CONTENT: [${ARG5}] !"
+    exit
+fi
+
+if [[ $ARG6 == '' ]]; then
+    echo "ERROR: Invalid argument to create CONTENT: [${ARG6}] !"
+    exit
+fi
+
+MAIN_DIR="$ARG6"
+if [[ $ARG6 == '.env' ]]; then
+    if [[ ! -e $ARG6 ]]; then
+        echo "ERROR: Env File ${MAIN_DIR} not Found !"
+        exit
+    fi
+    ARG6=$(grep 'MAIN_DIR' "${ARG6}" | cut -d "=" -f2 | sed -r 's/"//g' | sed -r "s/'//g" | sed -r 's/ //g')
+    MAIN_DIR="'.\$app->getMainDir().'"
+fi
+
+if [[ ! -e "./resources/${ARG6}/content/${ARG2}/en" ]]; then
+    echo "ERROR: Not found RESOURCE PATH CONTENT: ./resources/${ARG6}/content/${ARG2}/en !"
+    exit
+fi
+
+if [[ ! -e "./resources/${ARG6}/content/${ARG2}/es" ]]; then
+    echo "ERROR: Not found RESOURCE PATH CONTENT: ./resources/${ARG6}/content/${ARG2}/es !"
+    exit
+fi
+
+if [[ ! -e "./resources/${ARG6}/content/${ARG2}/pt-br" ]]; then
+    echo "ERROR: Not found RESOURCE PATH CONTENT: ./resources/${ARG6}/content/${ARG2}/pt-br !"
+    exit
+fi
+
+CONTENT="./resources/${ARG6}/content/${ARG2}/en/${ARG3}.php"
+
+if [[ -e $CONTENT ]]; then
+    echo "ERROR: The CONTENT already exists: ${CONTENT} !"
+    exit
+fi
+
+touch "${CONTENT}"
+
+CONTENT="./resources/${ARG6}/content/${ARG2}/es/${ARG3}.php"
+
+if [[ -e $CONTENT ]]; then
+    echo "ERROR: The CONTENT already exists: ${CONTENT} !"
+    exit
+fi
+
+touch "${CONTENT}"
+
+CONTENT="./resources/${ARG6}/content/${ARG2}/pt-br/${ARG3}.php"
+
+if [[ -e $CONTENT ]]; then
+    echo "ERROR: The CONTENT already exists: ${CONTENT} !"
+    exit
+fi
+
+touch "${CONTENT}"
+
+#Content-Name-Test
+CONTENT_DIR=$(echo "$ARG2" | cut -d "/" -f1)
+CONTENT_ORIGINAL="$ARG3"
+CONTENT_COMMENT=$(echo "$ARG3" | sed -r 's/-/ /g' | tr '[:lower:]' '[:upper:]')
+CONTENT_ID=$(echo "$ARG3" | tr '[:upper:]' '[:lower:]')
+CONTENT_TITLE=$(echo "$ARG3" | sed -r 's/-/ /g' | sed -r 's/\b(\w)(\w*)\b/\U\1\L\2/g')
+
+CONTENT_TEMPLATE="
+<?php
+global \$app;
+?>
+
+<!--${CONTENT_COMMENT} SESSION-->
+<div id='${CONTENT_ID}' class='div-session-sample'>
+    <h3>${CONTENT_TITLE}</h3>
+</div>"
+
+echo "${CONTENT_TEMPLATE}" > "./resources/${ARG6}/content/${ARG2}/en/${ARG3}.php"
+echo "${CONTENT_TEMPLATE}" > "./resources/${ARG6}/content/${ARG2}/es/${ARG3}.php"
+echo "${CONTENT_TEMPLATE}" > "./resources/${ARG6}/content/${ARG2}/pt-br/${ARG3}.php"
+
+#################### LOOP INIT TO CREATE CONTENT
+
+ARRAY='"'$(echo "$ARG5" | sed -e 's/:/" "/g')'"'
+CONTENTS_ARRAY=($ARRAY)
+
+if [[ $ARG4 =~ 'db:true' ]]; then
+
+    echo "Database Dir check-in...."
+    if [[ ! -e "./resources/${ARG6}/content/database/${CONTENT_DIR}/en/" ]]; then
+        echo "ERROR: Not found ./resources/${ARG6}/content/database/${CONTENT_DIR}/en/"
+        exit
+    fi
+
+    if [[ ! -e "./resources/${ARG6}/content/database/${CONTENT_DIR}/es/" ]]; then
+        echo "ERROR: Not found ./resources/${ARG6}/content/database/${CONTENT_DIR}/es/"
+        exit
+    fi
+
+    if [[ ! -e "./resources/${ARG6}/content/database/${CONTENT_DIR}/pt-br/" ]]; then
+        echo "ERROR: Not found ./resources/${ARG6}/content/database/${CONTENT_DIR}/pt-br/"
+        exit
+    fi
+
+    echo "Create Database Files..."
+
+    mkdir -p "./resources/${ARG6}/content/database/${CONTENT_DIR}/en/${CONTENT_ORIGINAL}"
+    mkdir -p "./resources/${ARG6}/content/database/${CONTENT_DIR}/es/${CONTENT_ORIGINAL}"
+    mkdir -p "./resources/${ARG6}/content/database/${CONTENT_DIR}/pt-br/${CONTENT_ORIGINAL}"
+
+    for ((i = 0; i < ${#CONTENTS_ARRAY[@]}; i++)); do
+
+        CONTENT_CURRENT=$(echo "${CONTENTS_ARRAY[$i]}" | sed -e 's/"//g')
+
+        CONTENTS="
+<div id='${CONTENT_CURRENT}-${CONTENT_ID}' class='div-container-samples style-color-pastel-yellow' data-menu='#${CONTENT_CURRENT}-${CONTENT_ID}'>
+    <?php include './resources/${MAIN_DIR}/content/database/${CONTENT_DIR}/en/${CONTENT_ORIGINAL}/${CONTENT_CURRENT}.html'; ?>
+</div>"
+
+        echo "${CONTENTS}" >> "./resources/${ARG6}/content/${ARG2}/en/${ARG3}.php"
+
+        CONTENTS="
+<div id='${CONTENT_CURRENT}-${CONTENT_ID}' class='div-container-samples style-color-pastel-yellow' data-menu='#${CONTENT_CURRENT}-${CONTENT_ID}'>
+    <?php include './resources/${MAIN_DIR}/content/database/${CONTENT_DIR}/es/${CONTENT_ORIGINAL}/${CONTENT_CURRENT}.html'; ?>
+</div>"
+
+        echo "${CONTENTS}" >> "./resources/${ARG6}/content/${ARG2}/es/${ARG3}.php"
+
+        CONTENTS="
+<div id='${CONTENT_CURRENT}-${CONTENT_ID}' class='div-container-samples style-color-pastel-yellow' data-menu='#${CONTENT_CURRENT}-${CONTENT_ID}'>
+    <?php include './resources/${MAIN_DIR}/content/database/${CONTENT_DIR}/pt-br/${CONTENT_ORIGINAL}/${CONTENT_CURRENT}.html'; ?>
+</div>"
+
+        echo "${CONTENTS}" >> "./resources/${ARG6}/content/${ARG2}/pt-br/${ARG3}.php"
+
+        touch "./resources/${ARG6}/content/database/${CONTENT_DIR}/en/${CONTENT_ORIGINAL}/${CONTENT_CURRENT}.html"
+        touch "./resources/${ARG6}/content/database/${CONTENT_DIR}/es/${CONTENT_ORIGINAL}/${CONTENT_CURRENT}.html"
+        touch "./resources/${ARG6}/content/database/${CONTENT_DIR}/pt-br/${CONTENT_ORIGINAL}/${CONTENT_CURRENT}.html"
+
+        CONTENT_HTML="
+<p class='p-titles-samples'>${CONTENT_CURRENT}()</p>
+
+<div class='div-general-sample'>
+    <h4>Introduction</h4>
+    <div class='div-introduction-sample'>
+        <p>
+            The ${CONTENT_CURRENT}() function ...
+        </p>
+    </div>
+</div>
+
+<div class='div-general-sample'>
+    <h4>Explaining</h4>
+    <div class='div-explain-sample'>
+        <p>
+            ...
+        </p>
+        <ul class='ul-menu-explain'>
+            <li>
+                ...
+            </li>
+        </ul>
+        <p class='p-marked-emphasis'>
+            ...
+        </p>
+        <br />
+        <p class='span-marked-red'>
+            Return: []
+        </p>
+    </div>
+</div>
+
+<div class='div-general-sample'>
+    <h4>Parameters</h4>
+    <div class='div-parameters-sample'>
+        <p>
+            The expected parameters are:
+        </p>
+        <table class='table-parameters'>
+            <thead>
+            <tr>
+                <th>Parameter</th>
+                <th>Type</th>
+                <th>Values</th>
+                <th>Description</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>param name</td>
+                <td>param (Type)</td>
+                <td>'Sample Value Param'</td>
+                <td>Param Description</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class='div-general-sample'>
+    <h4>Sample Code</h4>
+    <div class='div-box-sample'>
+
+        <pre class='javascript'>
+
+/*Sample Codes*/
+jH('#test').${CONTENT_CURRENT}();
+
+        </pre>
+        <button id='bt_test_${CONTENT_CURRENT}' class='buttons-sample color-silver-two'>Run Sample ${CONTENT_CURRENT}</button>
+
+        <!--Add here more details about this function-->
+
+    </div>
+</div>
+        "
+
+        echo "${CONTENT_HTML}" > "./resources/${ARG6}/content/database/${CONTENT_DIR}/en/${CONTENT_ORIGINAL}/${CONTENT_CURRENT}.html"
+        echo "${CONTENT_HTML}" > "./resources/${ARG6}/content/database/${CONTENT_DIR}/es/${CONTENT_ORIGINAL}/${CONTENT_CURRENT}.html"
+        echo "${CONTENT_HTML}" > "./resources/${ARG6}/content/database/${CONTENT_DIR}/pt-br/${CONTENT_ORIGINAL}/${CONTENT_CURRENT}.html"
+
+    done
+
+fi
+
+#Normalize file (new line)
+echo "" >> "./resources/${ARG6}/content/${ARG2}/en/${ARG3}.php"
+echo "" >> "./resources/${ARG6}/content/${ARG2}/es/${ARG3}.php"
+echo "" >> "./resources/${ARG6}/content/${ARG2}/pt-br/${ARG3}.php"
+
+#################### LOOP END
+
+echo "CONTENT LIST:"
+ls -l "./resources/${ARG6}/content/${ARG2}/en/${ARG3}.php"
+ls -l "./resources/${ARG6}/content/${ARG2}/es/${ARG3}.php"
+ls -l "./resources/${ARG6}/content/${ARG2}/pt-br/${ARG3}.php"
+
+if [[ $ARG4 =~ 'db:true' ]]; then
+    echo ""
+    echo "CONTENTS DATABASE (EN):"
+    ls -l "./resources/${ARG6}/content/database/${CONTENT_DIR}/en/${CONTENT_ORIGINAL}/"*
+    echo "CONTENTS DATABASE (ES):"
+    ls -l "./resources/${ARG6}/content/database/${CONTENT_DIR}/es/${CONTENT_ORIGINAL}/"*
+    echo "CONTENTS DATABASE (PT-BR):"
+    ls -l "./resources/${ARG6}/content/database/${CONTENT_DIR}/pt-br/${CONTENT_ORIGINAL}/"*
+    exit
+fi
+
+echo ""
+echo "Create CONTENT is finished"
+
+exit

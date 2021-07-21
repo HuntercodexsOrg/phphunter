@@ -1,0 +1,58 @@
+#!/bin/bash
+
+################################################################################
+# Author: Jereelton Teixeira
+################################################################################
+
+ARG1="$1"
+ARG2="$2"
+ARG3="$3"
+ARG4="$4" #Main Dir
+
+if [[ ! $ARG1 =~ ':' ]]; then
+    echo "ERROR: Invalid argument to create RESOURCE: ${ARG1} !"
+    exit
+fi
+
+if [[ $ARG2 == '' ]]; then
+    echo "ERROR: Invalid argument to create RESOURCE: [${ARG2}] !"
+    exit
+fi
+
+if [[ ! $ARG3 =~ '/' ]]; then
+    echo "ERROR: Invalid argument to create RESOURCE: [${ARG3}] !"
+    exit
+fi
+
+if [[ $ARG4 == '' ]]; then
+    echo "ERROR: Invalid argument to create RESOURCE: [${ARG4}] !"
+    exit
+fi
+
+if [[ $ARG4 == '.env' ]]; then
+    if [[ ! -e $ARG4 ]]; then
+        echo "ERROR: Env File ${MAIN_DIR} not Found !"
+        eit
+    fi
+    ARG4=$(grep 'MAIN_DIR' "${ARG4}" | cut -d "=" -f2 | sed -r 's/"//g' | sed -r "s/'//g" | sed -r 's/ //g')
+fi
+
+RESOURCE="./resources/${ARG4}/${ARG2}/${ARG3}"
+
+if [[ -e $RESOURCE ]]; then
+    echo "ERROR: The RESOURCE already exists: ${RESOURCE} !"
+    exit
+fi
+
+mkdir -p "${RESOURCE}"
+mkdir -p "${RESOURCE}/en"
+mkdir -p "${RESOURCE}/es"
+mkdir -p "${RESOURCE}/pt-br"
+
+echo "RESOURCE LIST:"
+ls -l "${RESOURCE}"
+
+echo ""
+echo "Create RESOURCE is finished"
+
+exit

@@ -1,0 +1,38 @@
+{
+    "name": "huntercodexs/phphunter",
+    "type": "project",
+    "description": "The Mini Framework to PHP Web Development...",
+    "license": "MIT",
+    "keywords": ["framework","mini","php","hunter"],
+    "homepage": "http://www.phphunter.com",
+    "version": "1.0.0",
+    "authors": [
+        {
+            "name": "Hunter Codexs",
+            "email": "huntercodexs@gmail.com"
+        }
+    ],
+    "require": {
+        "slim/slim": "4.2.0",
+        "rain/raintpl": "3.1.1",
+        "ext-json": "*",
+        "huntercodexs/phphunterkernel": "1.0.0"
+    },
+    "autoload": {
+        "files": [
+            "app/functions.php"
+        ],
+        "psr-4": {
+            "ApiHunterLegacy\\": "api/legacy",
+            "ApiHunterSlim\\": "api/",
+            "AppHunter\\": "app/",
+            "AppHunterModel\\": "app/layers/model/",
+            "AppHunterView\\": "app/layers/view/",
+            "AppHunterController\\": "app/layers/controller/",
+            "AppHunterORM\\": "app/orm/",
+            "AppHunterSource\\": "app/source/",
+            "AppHunterTemplate\\": "app/template/",
+            "AppHunterThemes\\": "app/themes/"
+        }
+    }
+}

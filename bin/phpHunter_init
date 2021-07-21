@@ -1,0 +1,338 @@
+#!/bin/bash
+
+################################################################################
+# Author: Jereelton Teixeira
+################################################################################
+
+#----------------------------------------------------------------------------------------
+
+function initMainDir {
+
+    ERROR=1
+
+    while [[ $ERROR == 1 ]]; do
+
+        echo "What is the main path of this project (/resources/{MAIN_PATH}/content)? "
+        read MAIN_DIR
+        echo ""
+
+        if [[ "${MAIN_DIR}" == "" || ! "${MAIN_DIR}" ]]; then
+            echo ""
+            echo "ERROR: The main path is invalid !"
+            echo ""
+            ERROR=1
+            continue
+        fi
+
+        if [[ ${MAIN_DIR} == '.env' ]]; then
+            if [[ ! -e ${MAIN_DIR} ]];
+            then
+                ERROR=1
+                echo "ERROR: Env file ${MAIN_DIR} not Found, please provide the correct name of dotenv file !"
+                continue
+            fi
+            MAIN_DIR=$(grep 'MAIN_DIR' "${ARG6}" | cut -d "=" -f2 | sed -r 's/"//g' | sed -r "s/'//g" | sed -r 's/ //g')
+            ERROR=0
+            break
+        fi
+
+        if [[ ${MAIN_DIR} == 'sample' ]]; then
+            if [[ ! -e "./bin/project/src/environment/env.txt" ]];
+            then
+                ERROR=1
+                echo "ERROR: Env file env.txt is missing !"
+                continue
+            fi
+            MAIN_DIR=$(grep 'MAIN_DIR' "./bin/project/src/environment/env.txt" | cut -d "=" -f2 | sed -r 's/"//g' | sed -r "s/'//g" | sed -r 's/ //g')
+            ERROR=0
+            break
+        fi
+
+        if [[ -e ./resources/${MAIN_DIR} ]]; then
+            ERROR=1
+            echo "ERROR: Directory ${MAIN_DIR} already exists in resources !"
+            continue
+        else
+            ERROR=0
+        fi
+
+    done
+
+}
+#----------------------------------------------------------------------------------------
+
+#Check if framework is already installed
+
+if ls -a | grep -E '(\.env|\.htaccess|app|api|downloads|resources|node_modules)'
+then
+    echo ""
+    echo "ERROR: phpHunter Framework is already installed or broken,"
+    echo "please make a clean up in your system and try again."
+    echo "HELP: Use ./bin/phpHunter --remove to clean up and uninstall phpHunter."
+    echo ""
+    exit
+fi
+
+#----------------------------------------------------------------------------------------
+
+#Init framework
+
+initMainDir
+
+echo "Wait . . ."
+
+sleep 2
+
+#DIRECTORIES-----------------------------------------------------------------------------
+
+#API
+mkdir -p "./api"
+mkdir -p "./api/session"
+
+#APP
+mkdir -p "./app"
+mkdir -p "./app/model"
+mkdir -p "./app/view"
+mkdir -p "./app/controller"
+mkdir -p "./app/source"
+
+#RESOURCES
+mkdir -p "./resources"
+#RESOURCES DEFAULT
+mkdir -p "./resources/css"
+mkdir -p "./resources/js"
+mkdir -p "./resources/engine"
+mkdir -p "./resources/images"
+mkdir -p "./resources/public"
+mkdir -p "./resources/maintenance"
+mkdir -p "./resources/shared"
+mkdir -p "./resources/shared/alerts"
+mkdir -p "./resources/data/access"
+#RESOURCES APPLICATION/SAMPLE
+mkdir -p "./resources/${MAIN_DIR}"
+mkdir -p "./resources/${MAIN_DIR}/content"
+#RESOURCES CONTENT SITE
+mkdir -p "./resources/${MAIN_DIR}/content/site/sample"
+mkdir -p "./resources/${MAIN_DIR}/content/site/sample/en"
+mkdir -p "./resources/${MAIN_DIR}/content/site/sample/es"
+mkdir -p "./resources/${MAIN_DIR}/content/site/sample/pt-br"
+#RESOURCES CONTENT DATABASE SITE
+mkdir -p "./resources/${MAIN_DIR}/content/database/site/sample"
+mkdir -p "./resources/${MAIN_DIR}/content/database/site/sample/en"
+mkdir -p "./resources/${MAIN_DIR}/content/database/site/sample/es"
+mkdir -p "./resources/${MAIN_DIR}/content/database/site/sample/pt-br"
+#RESOURCES CONTENT EXTENSIONS
+mkdir -p "./resources/${MAIN_DIR}/content/extensions/sample_extension"
+mkdir -p "./resources/${MAIN_DIR}/content/extensions/sample_extension/en"
+mkdir -p "./resources/${MAIN_DIR}/content/extensions/sample_extension/es"
+mkdir -p "./resources/${MAIN_DIR}/content/extensions/sample_extension/pt-br"
+#RESOURCES CONTENT DATABASE EXTENSIONS
+mkdir -p "./resources/${MAIN_DIR}/content/database/extensions/sample_extension"
+mkdir -p "./resources/${MAIN_DIR}/content/database/extensions/sample_extension/en"
+mkdir -p "./resources/${MAIN_DIR}/content/database/extensions/sample_extension/es"
+mkdir -p "./resources/${MAIN_DIR}/content/database/extensions/sample_extension/pt-br"
+
+#DOWNLOADS
+mkdir -p "./downloads"
+
+#NODE MODULES
+mkdir -p "./node_modules"
+
+#FILES------------------------------------------------------------------------------------
+
+#API
+if [[ ! -e "./api/index.php" ]]; then
+    cp -v "./bin/project/src/api/index.php" "./api/index.php"
+fi
+
+if [[ ! -e "./api/session/index.php" ]]; then
+    cp -v "./bin/project/src/api/session/index.php" "./api/session/index.php"
+fi
+
+#APP
+if [[ ! -e "./app/source/AppHandler.php" ]]; then
+    cp -v "./bin/project/src/app/source/AppHandler.php" "./app/source/AppHandler.php"
+fi
+
+if [[ ! -e "./app/source/ContentHandler.php" ]]; then
+    cp -v "./bin/project/src/app/source/ContentHandler.php" "./app/source/ContentHandler.php"
+fi
+
+if [[ ! -e "./app/source/MenuHandler.php" ]]; then
+    cp -v "./bin/project/src/app/source/MenuHandler.php" "./app/source/MenuHandler.php"
+fi
+
+if [[ ! -e "./app/functions.php" ]]; then
+    cp -v "./bin/project/src/app/functions.php" "./app/functions.php"
+fi
+
+#CONTENTS - CSS
+
+if [[ ! -e "./resources/css/styles-light.css" ]]; then
+    cp -v "./bin/project/src/css/styles-light.css" "./resources/css/styles-light.css"
+fi
+
+if [[ ! -e "./resources/css/styles-night.css" ]]; then
+    cp -v "./bin/project/src/css/styles-night.css" "./resources/css/styles-night.css"
+fi
+
+#CONTENTS - JS
+
+if [[ ! -e "./resources/js/js_app.js" ]]; then
+    cp -v "./bin/project/src/js/js_app.js" "./resources/js/js_app.js"
+fi
+
+if [[ ! -e "./resources/js/js_app_shared.js" ]]; then
+    cp -v "./bin/project/src/js/js_app_shared.js" "./resources/js/js_app_shared.js"
+fi
+
+#CONTENTS - ENGINE
+
+if [[ ! -e "./resources/engine/header.php" ]]; then
+    cp -v "./bin/project/src/engine/header.php" "./resources/engine/header.php"
+fi
+
+if [[ ! -e "./resources/engine/menu.php" ]]; then
+    cp -v "./bin/project/src/engine/menu.php" "./resources/engine/menu.php"
+fi
+
+if [[ ! -e "./resources/engine/content.php" ]]; then
+    cp -v "./bin/project/src/engine/content.php" "./resources/engine/content.php"
+fi
+
+#CONTENTS - IMAGES
+
+cp -v "./bin/project/src/images/"* "./resources/images/"
+
+#CONTENTS - INDEX PUBLIC
+
+if [[ ! -e "./resources/public/index.php" ]]; then
+    cp -v "./bin/project/src/public/index.php" "./resources/public/index.php"
+fi
+
+#CONTENTS - INDEX MAINTENANCE
+
+if [[ ! -e "./resources/maintenance/index.php" ]]; then
+    cp -v "./bin/project/src/maintenance/index.php" "./resources/maintenance/index.php"
+fi
+
+#CONTENTS - SHARED
+
+if [[ ! -e "./resources/shared/alerts/404.php" ]]; then
+    cp -v "./bin/project/src/shared/alerts/404.php" "./resources/shared/alerts/404.php"
+fi
+
+if [[ ! -e "./resources/shared/alerts/build-in.php" ]]; then
+    cp -v "./bin/project/src/shared/alerts/build-in.php" "./resources/shared/alerts/build-in.php"
+fi
+
+#CONTENTS - DATA ACCESS
+
+if [[ ! -e "./resources/data/access/views.txt" ]]; then
+    cp -v "./bin/project/src/views/access/views.txt" "./resources/data/access/views.txt"
+    echo "Please, provide the password for root user to make a permission in the file /resources/data/access/views.txt"
+    sudo chmod 777 "./resources/data/access/views.txt"
+fi
+
+#CONTENTS - RESOURCES/CONTENTS/ITEMS
+
+cp -rv "./bin/project/src/application/"* "./resources/${MAIN_DIR}/content/"
+
+#INDEX ROOT
+
+if [[ -e "./index.php" ]]; then
+    cp -v "./index.php" "./index.php.bkp"
+fi
+cp -v "./bin/project/src/root/index.php" "./index.php"
+
+
+#ENV
+
+if [[ -e "./.env" ]]; then
+    cp -v "./.env" "./.env.bkp"
+fi
+cp -rv "./bin/project/src/environment/env.txt" "./.env"
+
+#HTACCESS
+
+if [[ -e "./.htaccess" ]]; then
+    cp -v "./.htaccess" "./.htaccess.bkp"
+fi
+cp -v "./bin/project/src/apache/htaccess.txt" "./.htaccess"
+
+#PACKAGE JSON NPM JSHUNTER
+
+JSON_FILE='./package-lock.json'
+
+if [[ -e "${JSON_FILE}" ]]; then
+    cp -v "${JSON_FILE}" "${JSON_FILE}.bkp"
+fi
+cp -v "./bin/project/src/npm/package-lock.json" "${JSON_FILE}"
+
+#NPM INSTALL
+
+VERSION=$(grep -m1 '"jshunter":' "${JSON_FILE}" | cut -d ":" -f2 | sed -r 's/[^0-9.]//g')
+
+echo ""
+echo "* You can install the jsHunter after this installation with a version that you needed*"
+echo "Install jsHunter (${VERSION}) from NPM [yes, no] ?"
+read RSP
+
+if [[ $RSP == 'yes' ]]; then
+
+    #NPM installed ?
+    CHECKIN1=$(dpkg -l | grep npm)
+    CHECKIN2=$(builtin type -P npm)
+    apt show npm >> /dev/null 2>&1
+    CHECKIN3=$?
+    if [[ $CHECKIN1 == "" && $CHECKIN2 == "" && $CHECKIN3 != "0" ]];
+    then
+        echo "Error: The NPM is not installed in your system !"
+        exit
+    fi
+
+    npm i jshunter
+
+else
+
+    echo ""
+    echo "OK, you can still use 'npm i jshunter' to install the library in this current application"
+    echo "or install jsHunter from GitHub project https://github.com/jereelton-devel/jsHunter.git"
+    echo ""
+
+fi
+
+echo ""
+echo "Do you like install the jsHunter from GitHub now  [yes, no] ?"
+read RSP
+
+PWD_SAVE=$(pwd)
+if [[ $RSP == 'yes' ]]; then
+
+    #GIT installed ?
+    CHECKIN1=$(dpkg -l | grep git)
+    CHECKIN2=$(builtin type -P git)
+    apt show git >> /dev/null 2>&1
+    CHECKIN3=$?
+    if [[ $CHECKIN1 == "" && $CHECKIN2 == "" && $CHECKIN3 != "0" ]];
+    then
+        echo "Error: The GIT is not installed in your system !"
+        exit
+    fi
+
+    mkdir -p "./node_modules/jshunter"
+    if [[ -e "./node_modules/jshunter" ]]; then
+        cd "./node_modules/jshunter"
+        git clone "https://github.com/jereelton-devel/jsHunter.git" .
+    else
+        echo "ERROR: Missing path node_modules/jshunter to clone project from GitHub"
+    fi
+fi
+
+cd "$PWD_SAVE"
+
+echo "Please, inform your password for root user, you can too exec commando 'sudo chown nobody:nogroup * -R' after this installation !"
+sudo chown nobody:nogroup * -R
+
+echo "phpHunter_init is finished"
+echo ""
