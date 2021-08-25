@@ -1,0 +1,1 @@
+<h1>User:<?=$_GET['name']?> Its Work !</h1>

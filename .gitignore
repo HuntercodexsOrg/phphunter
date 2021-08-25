@@ -28,3 +28,9 @@ views.txt
 *.bkp
 *.old
 *.log
+[^composer]*.json
+*.idea
+.old
+tasks.inf
+/vendor/
+/node_modules/

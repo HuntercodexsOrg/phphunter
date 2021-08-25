@@ -16,23 +16,28 @@
         "slim/slim": "4.2.0",
         "rain/raintpl": "3.1.1",
         "ext-json": "*",
-        "huntercodexs/phphunterkernel": "1.0.0"
+        "huntercodexs/phphunterkernel": "dev-devel_220821"
     },
     "autoload": {
         "files": [
-            "app/functions.php"
+            "app/helpers.php"
         ],
         "psr-4": {
-            "ApiHunterLegacy\\": "api/legacy",
-            "ApiHunterSlim\\": "api/",
-            "AppHunter\\": "app/",
-            "AppHunterModel\\": "app/layers/model/",
-            "AppHunterView\\": "app/layers/view/",
-            "AppHunterController\\": "app/layers/controller/",
-            "AppHunterORM\\": "app/orm/",
-            "AppHunterSource\\": "app/source/",
-            "AppHunterTemplate\\": "app/template/",
-            "AppHunterThemes\\": "app/themes/"
+            "Api\\PhpHunter\\Legacy\\": "api/legacy",
+            "Api\\PhpHunter\\Slim\\": "api/",
+            "App\\PhpHunter\\": "app/",
+            "App\\PhpHunter\\Model\\": "app/layers/model/",
+            "App\\PhpHunter\\View\\": "app/layers/view/",
+            "App\\PhpHunter\\Controller\\": "app/layers/controller/",
+            "App\\PhpHunter\\ORM\\": "app/orm/",
+            "App\\PhpHunter\\Source\\": "app/source/",
+            "App\\PhpHunter\\Template\\": "app/template/",
+            "App\\PhpHunter\\Themes\\": "app/themes/",
+            "App\\PhpHunter\\Framework\\Controllers\\": "app/Controllers/",
+            "App\\PhpHunter\\Framework\\Models\\": "app/Models/",
+            "App\\PhpHunter\\Framework\\Services\\": "app/Services/",
+            "App\\PhpHunter\\Framework\\Middlewares\\": "app/Middlewares/",
+            "App\\PhpHunter\\Framework\\Views\\": "app/Views/"
         }
     }
 }
