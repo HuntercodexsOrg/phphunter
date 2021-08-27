@@ -23,21 +23,16 @@
             "app/helpers.php"
         ],
         "psr-4": {
-            "Api\\PhpHunter\\Legacy\\": "api/legacy",
-            "Api\\PhpHunter\\Slim\\": "api/",
-            "App\\PhpHunter\\": "app/",
-            "App\\PhpHunter\\Model\\": "app/layers/model/",
-            "App\\PhpHunter\\View\\": "app/layers/view/",
-            "App\\PhpHunter\\Controller\\": "app/layers/controller/",
-            "App\\PhpHunter\\ORM\\": "app/orm/",
-            "App\\PhpHunter\\Source\\": "app/source/",
-            "App\\PhpHunter\\Template\\": "app/template/",
-            "App\\PhpHunter\\Themes\\": "app/themes/",
-            "App\\PhpHunter\\Framework\\Controllers\\": "app/Controllers/",
-            "App\\PhpHunter\\Framework\\Models\\": "app/Models/",
-            "App\\PhpHunter\\Framework\\Services\\": "app/Services/",
-            "App\\PhpHunter\\Framework\\Middlewares\\": "app/Middlewares/",
-            "App\\PhpHunter\\Framework\\Views\\": "app/Views/"
+            "PhpHunter\\Framework\\App\\": "app/",
+            "PhpHunter\\Framework\\Api\\Slim\\": "api/",
+            "PhpHunter\\Framework\\App\\Views\\": "app/Views/",
+            "PhpHunter\\Framework\\Api\\Legacy\\": "api/legacy",
+            "PhpHunter\\Framework\\App\\Models\\": "app/Models/",
+            "PhpHunter\\Framework\\App\\Sources\\": "app/Sources/",
+            "PhpHunter\\Framework\\App\\Services\\": "app/Services/",
+            "PhpHunter\\Framework\\App\\Controllers\\": "app/Controllers/",
+            "PhpHunter\\Framework\\App\\Middlewares\\": "app/Middlewares/",
+            "PhpHunter\\Framework\\App\\Configuration\\": "app/Configuration/"
         }
     }
 }

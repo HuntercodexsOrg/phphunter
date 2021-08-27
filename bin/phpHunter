@@ -28,7 +28,7 @@ function helper {
     --remove - To remove the framework
     --lock - To lock application (maintenance mode)
     --unlock - To unlock application
-    --help - Show all commands and helpers to use phpHunter Framework
+    --help - Show all commands and helpers to use phpHunter Mini Framework
 
     (To commands below please, see Documentation on GitHub)
     create:api

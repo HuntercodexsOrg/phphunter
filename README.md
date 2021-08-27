@@ -1,4 +1,4 @@
-# Framework phpHunter
+# PhpHunter Mini Framework
 
 <small>Web Developers</small>
 <hr />
@@ -27,7 +27,7 @@ Website: www.phphunter.com.br
     --refresh - Update project (reload all features)
     --lock - Lock application (maintenance mode)
     --unlock - Unlock application
-    --help - Show all commands and helpers to use phpHunter Framework
+    --help - Show all commands and helpers to use phpHunter Mini Framework
 
     (To commands below please, see Documentation on GitHub)
     create:api

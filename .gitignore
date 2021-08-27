@@ -1,7 +1,8 @@
-node_modules/
+/vendor/
+/node_modules/
 vendor/
 library/
-.idea/
+*.idea/
 jsHunter/
 old/
 videos/
@@ -11,12 +12,12 @@ resources/
 downloads/
 test
 *old*
+tmp/
 tasks*.inf
 .htaccess
 index.php
 package-lock.json
 composer.lock
-tmp
 *.sql
 *.exe
 *.zip
@@ -29,8 +30,5 @@ views.txt
 *.old
 *.log
 [^composer]*.json
-*.idea
 .old
 tasks.inf
-/vendor/
-/node_modules/
