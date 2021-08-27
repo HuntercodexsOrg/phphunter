@@ -8,6 +8,10 @@ namespace PhpHunter\Framework\App\Configuration;
 
 class PhpHunterServicesSetup
 {
+    /**
+     * @description Get Config
+     * @return array
+     */
     public static function getConfig(): array
     {
         return [

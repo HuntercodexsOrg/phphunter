@@ -12,7 +12,14 @@ class HelperHunter
     const ROOT_DIR = __DIR__."/../";
     const LOG_DIR = self::ROOT_DIR."/app/log/";
 
-    public static function localLogger($filename, $data, $append = true)
+    /**
+     * @description Local Logger
+     * @param string $filename #Mandatory
+     * @param string|array $data #Mandatory
+     * @param bool $append #Optional
+     * @return void
+     */
+    public static function localLogger(string $filename, string|array $data, bool $append = true): void
     {
         $date = date('YmdH');
         $log_date = date('Y/m/d H:i:s');
@@ -35,7 +42,12 @@ class HelperHunter
         }
     }
 
-    public static function getEnv($name)
+    /**
+     * @description Get Env
+     * @param string $name #Mandatory
+     * @return string
+     */
+    public static function getEnv(string $name): string
     {
         if (!file_exists(self::ROOT_DIR . ".env")) {
             die("Missing: " . self::ROOT_DIR . ".env");
@@ -63,7 +75,12 @@ class HelperHunter
         return $env;
     }
 
-    public static function toArray($str)
+    /**
+     * @description toArray
+     * @param string $str #Mandatory
+     * @return array
+     */
+    public static function toArray(string $str): array
     {
         $a = array();
         if (strstr($str, ",")) {
@@ -77,6 +94,10 @@ class HelperHunter
         return $a;
     }
 
+    /**
+     * @description Helper Test
+     * @return void
+     */
     public static function helperTest()
     {
         echo "HelperHunter it's work...";

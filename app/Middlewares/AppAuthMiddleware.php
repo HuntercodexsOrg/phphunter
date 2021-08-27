@@ -2,10 +2,10 @@
 
 namespace PhpHunter\Framework\App\Middlewares;
 
-use PhpHunter\Kernel\Abstractions\RequestAbstract;
 use PhpHunter\Kernel\Controllers\ResponseController;
+use PhpHunter\Framework\App\Sources\ParametersPlugAbstract;
 
-class AppAuthMiddleware extends RequestAbstract
+class AppAuthMiddleware extends ParametersPlugAbstract
 {
     protected ResponseController $response;
 
@@ -20,6 +20,7 @@ class AppAuthMiddleware extends RequestAbstract
 
     /**
      * @description Test Auth
+     * @return bool
      */
     public function testAuth(): bool
     {
@@ -28,6 +29,7 @@ class AppAuthMiddleware extends RequestAbstract
 
     /**
      * @description Check Auth
+     * @return bool
      */
     public function checkAuth(): bool
     {

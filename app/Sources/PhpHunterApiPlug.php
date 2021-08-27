@@ -3,13 +3,11 @@
 namespace PhpHunter\Framework\App\Sources;
 
 use PhpHunter\Kernel\Controllers\ApiRouterController;
-use PhpHunter\Kernel\Controllers\HunterCatcherController;
 
 class PhpHunterApiPlug extends ApiRouterController
 {
     /**
      * @description Constructor Class
-     * @throws HunterCatcherController
      */
     public function __construct()
     {

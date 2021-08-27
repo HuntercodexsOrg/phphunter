@@ -1,35 +1,13 @@
 <?php
 
-namespace Atlas\Services;
+namespace PhpHunter\Framework\App\Services;
 
-use Atlas\Controllers\FileManagerController;
-use Atlas\Controllers\ServiceController;
-use Atlas\Controllers\AtlasLog;
+use PhpHunter\Kernel\Controllers\FileManagerController;
 
-class FileManager extends ServiceController
+class FileManager extends FileManagerController
 {
-    /**
-     * @see ServiceController abstract class
-     */
-
-    public function __construct($restful, $action, $params)
+    public function __construct()
     {
-        $this->controller = new FileManagerController();
-        $this->controller->params = $params;
-        $this->controller->request = $restful->request();
-        $this->restful = $restful;
-        $this->action = $action;
+        parent::__construct();
     }
-    
-    public function run()
-    {
-        if(!method_exists($this->controller, $this->action)) {
-            $this->restful->response(json_encode(['error' => 'Error: Missing Action']), 503);
-        }
-
-        $this->controller->{$this->action}();
-        AtlasLog::saveLog($this);
-        $this->restful->response(json_encode($this->controller->returnData), $this->controller->returnCode);
-    }
-    
 }

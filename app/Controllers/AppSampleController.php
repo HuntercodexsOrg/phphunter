@@ -20,6 +20,7 @@ class AppSampleController extends ParametersAbstract
     /**
      * @description Static Sample
      * @param array $params #Optional
+     * @return void
      */
     public static function staticSample(array $params = []): void
     {
@@ -32,6 +33,7 @@ class AppSampleController extends ParametersAbstract
 
     /**
      * @description Create Sample
+     * @return bool
      */
     public function createSample(): bool
     {
@@ -44,6 +46,7 @@ class AppSampleController extends ParametersAbstract
 
     /**
      * @description CreateId Sample
+     * @return bool
      */
     public function createIdSample(): bool
     {
@@ -56,6 +59,7 @@ class AppSampleController extends ParametersAbstract
 
     /**
      * @description create User Sample
+     * @return bool
      */
     public function createUserSample(): bool
     {
@@ -68,6 +72,7 @@ class AppSampleController extends ParametersAbstract
 
     /**
      * @description Read Sample
+     * @return bool
      */
     public function readSample(): bool
     {
@@ -80,6 +85,7 @@ class AppSampleController extends ParametersAbstract
 
     /**
      * @description ReadId Sample
+     * @return bool
      */
     public function readIdSample(): bool
     {
@@ -92,6 +98,7 @@ class AppSampleController extends ParametersAbstract
 
     /**
      * @description Update Sample
+     * @return bool
      */
     public function updateSample(): bool
     {
@@ -104,6 +111,7 @@ class AppSampleController extends ParametersAbstract
 
     /**
      * @description UpdateId Sample
+     * @return bool
      */
     public function updateIdSample(): bool
     {
@@ -116,6 +124,7 @@ class AppSampleController extends ParametersAbstract
 
     /**
      * @description Delete Sample
+     * @return bool
      */
     public function deleteSample(): bool
     {
@@ -128,6 +137,7 @@ class AppSampleController extends ParametersAbstract
 
     /**
      * @description DeleteId Sample
+     * @return bool
      */
     public function deleteIdSample(): bool
     {
@@ -140,6 +150,7 @@ class AppSampleController extends ParametersAbstract
 
     /**
      * @description Patch Sample
+     * @return bool
      */
     public function patchSample(): bool
     {
@@ -152,6 +163,7 @@ class AppSampleController extends ParametersAbstract
 
     /**
      * @description PatchId Sample
+     * @return bool
      */
     public function patchIdSample(): bool
     {
