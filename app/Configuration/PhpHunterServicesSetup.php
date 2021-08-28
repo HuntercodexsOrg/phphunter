@@ -18,6 +18,14 @@ class PhpHunterServicesSetup
 
             "config" => [],
 
+            "upload" => [
+                "dir" => "resources/file_manager/",
+                "accepted" => ["gif", "png", "jpg", "jpeg", "pdf"],
+                "maxsize" => 1024 * 1024 * 2, /*2MB*/
+                "chmod" => 0777,
+                "prefix" => "ph_"
+            ],
+
             "debug" => false
         ];
     }

@@ -32,6 +32,32 @@ class AppSampleController extends ParametersAbstract
     }
 
     /**
+     * @description Test Sample Post
+     * @return void
+     */
+    public function testSamplePost(): void
+    {
+        $response = new ResponseController();
+        $response->jsonResponse([
+            "params" => $this->getParams(),
+            "message" => "Test Sample Post is OK",
+        ], 200);
+    }
+
+    /**
+     * @description Test Sample Get
+     * @return void
+     */
+    public function testSampleGet(): void
+    {
+        $response = new ResponseController();
+        $response->jsonResponse([
+            "params" => $this->getParams(),
+            "message" => "Test Sample Get is OK",
+        ], 200);
+    }
+
+    /**
      * @description Create Sample
      * @return bool
      */

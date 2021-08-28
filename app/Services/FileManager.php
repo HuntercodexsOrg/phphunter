@@ -10,4 +10,9 @@ class FileManager extends FileManagerController
     {
         parent::__construct();
     }
+
+    public function sendFile()
+    {
+        echo "sendFile";
+    }
 }

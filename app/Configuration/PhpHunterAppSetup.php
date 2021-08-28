@@ -19,7 +19,8 @@ class PhpHunterAppSetup
             //Define here the namespace to work
             "namespace" => [
                 "middlewares" => "PhpHunter\\Framework\\App\\Middlewares\\",
-                "controllers" => "PhpHunter\\Framework\\App\\Controllers\\"
+                "controllers" => "PhpHunter\\Framework\\App\\Controllers\\",
+                "services"    => "PhpHunter\\Framework\\App\\Services\\",
             ],
 
             //Define here the models to database

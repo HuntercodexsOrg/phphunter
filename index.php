@@ -19,6 +19,10 @@ $api->post('/api/create', 'AppAuthMiddleware@checkAuth', 'AppSampleController@cr
 $api->post('/api/{id:number}/create', 'AppAuthMiddleware@checkAuth', 'AppSampleController@createIdSample')->run();
 $api->post('/api/{id:number}/create/{profile:string}', 'AppAuthMiddleware@checkAuth', 'AppSampleController@createUserSample')->run();
 $api->post('/api/{id:number}/create{query:query_string}', 'AppAuthMiddleware@checkAuth', 'AppSampleController@createIdSample')->run();
+/*file*/
+$api->post('/api/service/file/send', 'AppAuthMiddleware@checkAuth', 'FileManager@sendFile')->run();
+/*test*/
+$api->post('/api/test/user', 'AppAuthMiddleware@checkAuth', 'AppSampleController@testSamplePost')->run();
 
 //----------------------------------------------------------------------------------------------------------------------
 /*GET:READ*/
@@ -26,6 +30,8 @@ $api->get('/api/read', 'AppAuthMiddleware@checkAuth', 'AppSampleController@readS
 $api->get('/api/{id:number}/read', 'AppAuthMiddleware@checkAuth', 'AppSampleController@readIdSample')->run();
 /*static*/
 $api->get('/api/static/read', 'AppAuthMiddleware@checkAuth', 'AppSampleController::staticSample')->run();
+/*test*/
+$api->get('/api/test/user', 'AppAuthMiddleware@checkAuth', 'AppSampleController@testSampleGet')->run();
 
 //----------------------------------------------------------------------------------------------------------------------
 /*PUT:UPDATE*/

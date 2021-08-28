@@ -20,6 +20,11 @@ tasks*.inf
 /.idea/
 /jsHunter/
 /node_modules/
+/resources/file_manager/*gif
+/resources/file_manager/*jpg
+/resources/file_manager/*jpeg
+/resources/file_manager/*png
+/resources/file_manager/*pdf
 
 # Framework (Comment when branch is not framework)
 #----------------------------------------------------------------------
