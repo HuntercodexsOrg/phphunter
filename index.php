@@ -20,7 +20,7 @@ $api->post('/api/{id:number}/create', 'AppAuthMiddleware@checkAuth', 'AppSampleC
 $api->post('/api/{id:number}/create/{profile:string}', 'AppAuthMiddleware@checkAuth', 'AppSampleController@createUserSample')->run();
 $api->post('/api/{id:number}/create{query:query_string}', 'AppAuthMiddleware@checkAuth', 'AppSampleController@createIdSample')->run();
 /*file*/
-$api->post('/api/service/file/send', 'AppAuthMiddleware@checkAuth', 'FileManager@sendFile')->run();
+$api->post('/api/service/file/send', 'AppAuthMiddleware@checkAuth', 'PhpHunterFileService@sendFile')->run();
 /*test*/
 $api->post('/api/test/user', 'AppAuthMiddleware@checkAuth', 'AppSampleController@testSamplePost')->run();
 
@@ -32,6 +32,8 @@ $api->get('/api/{id:number}/read', 'AppAuthMiddleware@checkAuth', 'AppSampleCont
 $api->get('/api/static/read', 'AppAuthMiddleware@checkAuth', 'AppSampleController::staticSample')->run();
 /*test*/
 $api->get('/api/test/user', 'AppAuthMiddleware@checkAuth', 'AppSampleController@testSampleGet')->run();
+/*service/sample*/
+$api->get('/api/service/sample', 'AppAuthMiddleware@checkAuth', 'PhpHunterSampleService@sampleServiceTest')->run();
 
 //----------------------------------------------------------------------------------------------------------------------
 /*PUT:UPDATE*/
@@ -166,5 +168,3 @@ $api->exception();
 //$app = new AppHandler($path, $public, $file, $views_file, $setup);
 //$app->appControl($_SERVER);
 //$app->run();
-
-?>
