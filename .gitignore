@@ -25,6 +25,7 @@ tasks*.inf
 /resources/file_manager/*jpeg
 /resources/file_manager/*png
 /resources/file_manager/*pdf
+/libraries/jshunter/
 
 # Framework (Comment when branch is not framework)
 #----------------------------------------------------------------------
@@ -35,6 +36,7 @@ package-lock.json
 
 # Engine (Comment when branc is not engine)
 #----------------------------------------------------------------------
+#src/
 #api/
 #app/
 #test/

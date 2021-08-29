@@ -2,53 +2,53 @@
 
 require_once __DIR__ . '/vendor/autoload.php';
 
-use PhpHunter\Framework\App\Sources\PhpHunterApiPlug;
+use PhpHunter\Framework\Connectors\ApiRouterConector;
 
 #################################################
 # API
 #################################################
 
-$api = new PhpHunterApiPlug();
+$api = new ApiRouterConector();
 
 /*Error: Nao pode aceitar rotas sem controllers*/
 $api->get('/api/find-all')->run();
 
 //----------------------------------------------------------------------------------------------------------------------
 /*POST:CREATE*/
-$api->post('/api/create', 'AppAuthMiddleware@checkAuth', 'AppSampleController@createSample')->run();
-$api->post('/api/{id:number}/create', 'AppAuthMiddleware@checkAuth', 'AppSampleController@createIdSample')->run();
-$api->post('/api/{id:number}/create/{profile:string}', 'AppAuthMiddleware@checkAuth', 'AppSampleController@createUserSample')->run();
-$api->post('/api/{id:number}/create{query:query_string}', 'AppAuthMiddleware@checkAuth', 'AppSampleController@createIdSample')->run();
+$api->post('/api/create', 'AppAuthMiddleware@checkAuth', 'ApplicationSampleController@createSample')->run();
+$api->post('/api/{id:number}/create', 'AppAuthMiddleware@checkAuth', 'ApplicationSampleController@createIdSample')->run();
+$api->post('/api/{id:number}/create/{profile:string}', 'AppAuthMiddleware@checkAuth', 'ApplicationSampleController@createUserSample')->run();
+$api->post('/api/{id:number}/create{query:query_string}', 'AppAuthMiddleware@checkAuth', 'ApplicationSampleController@createIdSample')->run();
 /*file*/
-$api->post('/api/service/file/send', 'AppAuthMiddleware@checkAuth', 'PhpHunterFileService@sendFile')->run();
+$api->post('/api/service/file/send', 'AppAuthMiddleware@checkAuth', 'ApplicationFileService@sendFile')->run();
 /*test*/
-$api->post('/api/test/user', 'AppAuthMiddleware@checkAuth', 'AppSampleController@testSamplePost')->run();
+$api->post('/api/test/user', 'AppAuthMiddleware@checkAuth', 'ApplicationSampleController@testSamplePost')->run();
 
 //----------------------------------------------------------------------------------------------------------------------
 /*GET:READ*/
-$api->get('/api/read', 'AppAuthMiddleware@checkAuth', 'AppSampleController@readSample')->run();
-$api->get('/api/{id:number}/read', 'AppAuthMiddleware@checkAuth', 'AppSampleController@readIdSample')->run();
+$api->get('/api/read', 'AppAuthMiddleware@checkAuth', 'ApplicationSampleController@readSample')->run();
+$api->get('/api/{id:number}/read', 'AppAuthMiddleware@checkAuth', 'ApplicationSampleController@readIdSample')->run();
 /*static*/
-$api->get('/api/static/read', 'AppAuthMiddleware@checkAuth', 'AppSampleController::staticSample')->run();
+$api->get('/api/static/read', 'AppAuthMiddleware@checkAuth', 'ApplicationSampleController::staticSample')->run();
 /*test*/
-$api->get('/api/test/user', 'AppAuthMiddleware@checkAuth', 'AppSampleController@testSampleGet')->run();
+$api->get('/api/test/user', 'AppAuthMiddleware@checkAuth', 'ApplicationSampleController@testSampleGet')->run();
 /*service/sample*/
-$api->get('/api/service/sample', 'AppAuthMiddleware@checkAuth', 'PhpHunterSampleService@sampleServiceTest')->run();
+$api->get('/api/service/sample', 'AppAuthMiddleware@checkAuth', 'ApplicationSampleService@sampleServiceTest')->run();
 
 //----------------------------------------------------------------------------------------------------------------------
 /*PUT:UPDATE*/
-$api->put('/api/update', 'AppAuthMiddleware@checkAuth', 'AppSampleController@updateSample')->run();
-$api->put('/api/{id:number}/update', 'AppAuthMiddleware@checkAuth', 'AppSampleController@updateIdSample')->run();
+$api->put('/api/update', 'AppAuthMiddleware@checkAuth', 'ApplicationSampleController@updateSample')->run();
+$api->put('/api/{id:number}/update', 'AppAuthMiddleware@checkAuth', 'ApplicationSampleController@updateIdSample')->run();
 
 //----------------------------------------------------------------------------------------------------------------------
 /*DELETE:DELETE*/
-$api->delete('/api/delete', 'AppAuthMiddleware@checkAuth', 'AppSampleController@deleteSample')->run();
-$api->delete('/api/{id:number}/delete', 'AppAuthMiddleware@checkAuth', 'AppSampleController@deleteIdSample')->run();
+$api->delete('/api/delete', 'AppAuthMiddleware@checkAuth', 'ApplicationSampleController@deleteSample')->run();
+$api->delete('/api/{id:number}/delete', 'AppAuthMiddleware@checkAuth', 'ApplicationSampleController@deleteIdSample')->run();
 
 //----------------------------------------------------------------------------------------------------------------------
 /*PATCH:NULL*/
-$api->patch('/api/update2', 'AppAuthMiddleware@checkAuth', 'AppSampleController@patchSample')->run();
-$api->patch('/api/{id:number}/update2', 'AppAuthMiddleware@checkAuth', 'AppSampleController@patchIdSample')->run();
+$api->patch('/api/update2', 'AppAuthMiddleware@checkAuth', 'ApplicationSampleController@patchSample')->run();
+$api->patch('/api/{id:number}/update2', 'AppAuthMiddleware@checkAuth', 'ApplicationSampleController@patchIdSample')->run();
 
 //----------------------------------------------------------------------------------------------------------------------
 //$api->get('/api/find-all', 'HandlerTasksController::getAllTasks')->run();

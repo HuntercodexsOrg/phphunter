@@ -20,19 +20,21 @@
     },
     "autoload": {
         "files": [
-            "app/helpers.php"
+            "src/helpers.php"
         ],
         "psr-4": {
-            "PhpHunter\\Framework\\App\\": "app/",
-            "PhpHunter\\Framework\\Api\\Slim\\": "api/",
-            "PhpHunter\\Framework\\App\\Views\\": "app/Views/",
-            "PhpHunter\\Framework\\Api\\Legacy\\": "api/legacy",
-            "PhpHunter\\Framework\\App\\Models\\": "app/Models/",
-            "PhpHunter\\Framework\\App\\Sources\\": "app/Sources/",
-            "PhpHunter\\Framework\\App\\Services\\": "app/Services/",
-            "PhpHunter\\Framework\\App\\Controllers\\": "app/Controllers/",
-            "PhpHunter\\Framework\\App\\Middlewares\\": "app/Middlewares/",
-            "PhpHunter\\Framework\\App\\Configuration\\": "app/Configuration/"
+            "PhpHunter\\Application\\": "src/Application/",
+            "PhpHunter\\Application\\Controllers\\": "src/Application/Controllers/",
+            "PhpHunter\\Application\\Middlewares\\": "src/Application/Middlewares/",
+            "PhpHunter\\Application\\Models\\": "src/Application/Models/",
+            "PhpHunter\\Application\\Services\\": "src/Application/Services/",
+            "PhpHunter\\Application\\Views\\": "src/Application/Views/",
+
+            "PhpHunter\\Framework\\": "src/PhpHunter/",
+            "PhpHunter\\Framework\\Connectors\\": "src/PhpHunter/Connectors/",
+            "PhpHunter\\Framework\\Controllers\\": "src/PhpHunter/Controllers/",
+            "PhpHunter\\Framework\\Middlewares\\": "src/PhpHunter/Middlewares/",
+            "PhpHunter\\Framework\\Settings\\": "src/PhpHunter/Settings/"
         }
     }
 }
