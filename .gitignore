@@ -25,12 +25,9 @@ tasks*.inf
 /resources/file_manager/*jpeg
 /resources/file_manager/*png
 /resources/file_manager/*pdf
-/libraries/jshunter/
-/libraries/hunter/
-/libraries/jquery/
-/libraries/bootstrap/
-/libraries/alertify/
-/libraries/toastr/
+/libraries/css/bootstrap
+/libraries/js/jshunter
+/libraries/js/jquery
 
 # Framework (Comment when branch is not framework)
 #----------------------------------------------------------------------
