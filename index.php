@@ -34,6 +34,8 @@ $api->get('/api/static/read', 'AppAuthMiddleware@checkAuth', 'ApplicationSampleC
 $api->get('/api/test/user', 'AppAuthMiddleware@checkAuth', 'ApplicationSampleController@testSampleGet')->run();
 /*service/sample*/
 $api->get('/api/service/sample', 'AppAuthMiddleware@checkAuth', 'ApplicationSampleService@sampleServiceTest')->run();
+/*model*/
+$api->get('/api/user', 'AppAuthMiddleware@checkAuth', 'UserSampleController@find')->run();
 
 //----------------------------------------------------------------------------------------------------------------------
 /*PUT:UPDATE*/

@@ -21,6 +21,13 @@ if (!function_exists('pr')) {
     }
 }
 
+if (!function_exists('dp')) {
+    function dp($data)
+    {
+        print_r($data);
+    }
+}
+
 if (!function_exists('prd')) {
     function prd($data)
     {
