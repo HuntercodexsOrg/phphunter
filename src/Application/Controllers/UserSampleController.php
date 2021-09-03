@@ -17,8 +17,8 @@ class UserSampleController extends ParametersAbstract
     public function __construct()
     {
         $this->initParams();
-        $this->response = new ResponseController();
         $this->userModel = new UserSampleModel();
+        $this->response = new ResponseController();
     }
 
     /**
@@ -27,6 +27,8 @@ class UserSampleController extends ParametersAbstract
      */
     public function find(): void
     {
+        /*Exemplo para query sql: ['u.id', 'u.name', 'u.email']*/
+        /*Exemplo comum: ['id', 'name', 'email']*/
         $result = $this->userModel->select();
         $this->response->jsonResponse([
             "result" => $result,

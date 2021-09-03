@@ -31,6 +31,7 @@
             "PhpHunter\\Application\\Views\\": "src/Application/Views/",
 
             "PhpHunter\\Framework\\": "src/PhpHunter/",
+            "PhpHunter\\Framework\\Faker\\": "src/PhpHunter/Faker/",
             "PhpHunter\\Framework\\Connectors\\": "src/PhpHunter/Connectors/",
             "PhpHunter\\Framework\\Controllers\\": "src/PhpHunter/Controllers/",
             "PhpHunter\\Framework\\Middlewares\\": "src/PhpHunter/Middlewares/",
