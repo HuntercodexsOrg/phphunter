@@ -36,6 +36,8 @@ $api->get('/api/test/user', 'AppAuthMiddleware@checkAuth', 'ApplicationSampleCon
 $api->get('/api/service/sample', 'AppAuthMiddleware@checkAuth', 'ApplicationSampleService@sampleServiceTest')->run();
 /*model*/
 $api->get('/api/user', 'AppAuthMiddleware@checkAuth', 'UserSampleController@find')->run();
+/*faker*/
+$api->get('/api/faker', 'AppAuthMiddleware@checkAuth', 'UserSampleController@findFaker')->run();
 
 //----------------------------------------------------------------------------------------------------------------------
 /*PUT:UPDATE*/

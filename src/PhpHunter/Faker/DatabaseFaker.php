@@ -56,12 +56,50 @@ class DatabaseFaker
     }
 
     /**
+     * @description Select Simulator
+     * @param array $database_faker #Optional
+     * @param array $fields #Optional
+     * @return array
+     */
+    private static function selectSimulator(array $database_faker, array $fields): array
+    {
+        /**
+         * @description  SQL SELECT SIMULATE BY FILTER FIELDS
+         * @example see the code below
+            $fi = implode(', ', $fields);
+            $sql = "
+                SELECT
+                    {$fi}
+                FROM
+                    products p
+                    JOIN categories c ON c.id = p.id
+                    JOIN stock s ON s.id = p.id
+                WHERE
+                    p.active = 1";
+         */
+
+        /*SQL SELECT SIMULATE BY FILTER FIELDS*/
+        if (count($fields) > 0) {
+            $select = [];
+            for ($i = 0; $i < count($database_faker); $i++) {
+                foreach ($database_faker[$i] as $key => $item) {
+                    if (in_array($key, $fields)) {
+                        $select[$i][$key] = $item;
+                    }
+                }
+            }
+            return $select;
+        }
+        return $database_faker;
+    }
+
+    /**
      * @description Users
      * @param array $fields #Optional
      */
     private static function users(array $fields = []): array
     {
-        $result = [
+        $users = [
             [
                 "id" => 1,
                 "name" => "Mathias Kajima",
@@ -88,35 +126,7 @@ class DatabaseFaker
             ],
         ];
 
-        /**
-         * @description  SQL SELECT SIMULATE BY FILTER FIELDS
-         * @example see the code below
-            $fi = implode(', ', $fields);
-            $sql = "
-                SELECT
-                    {$fi}
-                FROM
-                    products p
-                    JOIN categories c ON c.id = p.id
-                    JOIN stock s ON s.id = p.id
-                WHERE
-                p.active = 1";
-         */
-
-        /*SQL SELECT SIMULATE BY FILTER FIELDS*/
-        if (count($fields) > 0) {
-            $select = [];
-            for ($i = 0; $i < count($result); $i++) {
-                foreach ($result[$i] as $key => $item) {
-                    if (in_array($key, $fields)) {
-                        $select[$i][$key] = $item;
-                    }
-                }
-            }
-            return $select;
-        }
-
-        return $result;
+        return self::selectSimulator($users, $fields);
     }
 
     /**
@@ -125,7 +135,7 @@ class DatabaseFaker
      */
     private static function secrets(array $fields = []): array
     {
-        $result = [
+        $secrets = [
             "DATA" => [
                 "id" => 123456,
                 "description" => "This is only a test",
@@ -178,35 +188,7 @@ class DatabaseFaker
             ]
         ];
 
-        /**
-         * @description  SQL SELECT SIMULATE BY FILTER FIELDS
-         * @example see the code below
-            $fi = implode(', ', $fields);
-            $sql = "
-                SELECT
-                {$fi}
-            FROM
-                products p
-                JOIN categories c ON c.id = p.id
-                JOIN stock s ON s.id = p.id
-            WHERE
-                p.active = 1";
-         */
-
-        /*SQL SELECT SIMULATE BY FILTER FIELDS*/
-        if (count($fields) > 0) {
-            $select = [];
-            for ($i = 0; $i < count($result); $i++) {
-                foreach ($result[$i] as $key => $item) {
-                    if (in_array($key, $fields)) {
-                        $select[$i][$key] = $item;
-                    }
-                }
-            }
-            return $select;
-        }
-
-        return $result;
+        return self::selectSimulator($secrets, $fields);
     }
 
     /**
@@ -215,7 +197,7 @@ class DatabaseFaker
      */
     private static function customers(array $fields = []): array
     {
-        $result = [
+        $customers = [
             "datafirst" => "data-test",
             [
                 "id" => 1,
@@ -259,35 +241,7 @@ class DatabaseFaker
 
         ];
 
-        /**
-         * @description  SQL SELECT SIMULATE BY FILTER FIELDS
-         * @example see the code below
-            $fi = implode(', ', $fields);
-            $sql = "
-                SELECT
-                    {$fi}
-                FROM
-                    products p
-                    JOIN categories c ON c.id = p.id
-                    JOIN stock s ON s.id = p.id
-                WHERE
-                    p.active = 1";
-         */
-
-        /*SQL SELECT SIMULATE BY FILTER FIELDS*/
-        if (count($fields) > 0) {
-            $select = [];
-            for ($i = 0; $i < count($result); $i++) {
-                foreach ($result[$i] as $key => $item) {
-                    if (in_array($key, $fields)) {
-                        $select[$i][$key] = $item;
-                    }
-                }
-            }
-            return $select;
-        }
-
-        return $result;
+        return self::selectSimulator($customers, $fields);
     }
 
     /**
@@ -296,7 +250,7 @@ class DatabaseFaker
      */
     private static function products(array $fields = []): array
     {
-        $result = [
+        $products = [
             [
                 "id" => 0001,
                 "description" => "White Rice",
@@ -323,33 +277,6 @@ class DatabaseFaker
             ],
         ];
 
-        /**
-         * @description  SQL SELECT SIMULATE BY FILTER FIELDS
-         * @example see the code below
-            $fi = implode(', ', $fields);
-            $sql = "
-                SELECT
-                    {$fi}
-                FROM
-                    products p
-                    JOIN categories c ON c.id = p.id
-                    JOIN stock s ON s.id = p.id
-                WHERE
-                    p.active = 1";
-         */
-
-        if (count($fields) > 0) {
-            $select = [];
-            for ($i = 0; $i < count($result); $i++) {
-                foreach ($result[$i] as $key => $item) {
-                    if (in_array($key, $fields)) {
-                        $select[$i][$key] = $item;
-                    }
-                }
-            }
-            return $select;
-        }
-
-        return $result;
+        return self::selectSimulator($products, $fields);
     }
 }
