@@ -23,6 +23,8 @@ $api->post('/api/{id:number}/create{query:query_string}', 'AppAuthMiddleware@che
 $api->post('/api/service/file/send', 'AppAuthMiddleware@checkAuth', 'ApplicationFileService@sendFile')->run();
 /*test*/
 $api->post('/api/test/user', 'AppAuthMiddleware@checkAuth', 'ApplicationSampleController@testSamplePost')->run();
+/*new*/
+$api->post('/api/user', 'AppAuthMiddleware@checkAuth', 'UserSampleController@new')->run();
 
 //----------------------------------------------------------------------------------------------------------------------
 /*GET:READ*/
@@ -34,8 +36,10 @@ $api->get('/api/static/read', 'AppAuthMiddleware@checkAuth', 'ApplicationSampleC
 $api->get('/api/test/user', 'AppAuthMiddleware@checkAuth', 'ApplicationSampleController@testSampleGet')->run();
 /*service/sample*/
 $api->get('/api/service/sample', 'AppAuthMiddleware@checkAuth', 'ApplicationSampleService@sampleServiceTest')->run();
-/*model*/
-$api->get('/api/user', 'AppAuthMiddleware@checkAuth', 'UserSampleController@find')->run();
+/*model-user-find*/
+$api->get('/api/user/{id:number}', 'AppAuthMiddleware@checkAuth', 'UserSampleController@find')->run();
+/*model-user-find-all*/
+$api->get('/api/user', 'AppAuthMiddleware@checkAuth', 'UserSampleController@findAll')->run();
 /*faker*/
 $api->get('/api/faker', 'AppAuthMiddleware@checkAuth', 'UserSampleController@findFaker')->run();
 
@@ -43,16 +47,22 @@ $api->get('/api/faker', 'AppAuthMiddleware@checkAuth', 'UserSampleController@fin
 /*PUT:UPDATE*/
 $api->put('/api/update', 'AppAuthMiddleware@checkAuth', 'ApplicationSampleController@updateSample')->run();
 $api->put('/api/{id:number}/update', 'AppAuthMiddleware@checkAuth', 'ApplicationSampleController@updateIdSample')->run();
+/*update*/
+$api->put('/api/user', 'AppAuthMiddleware@checkAuth', 'UserSampleController@up')->run();
 
 //----------------------------------------------------------------------------------------------------------------------
 /*DELETE:DELETE*/
 $api->delete('/api/delete', 'AppAuthMiddleware@checkAuth', 'ApplicationSampleController@deleteSample')->run();
 $api->delete('/api/{id:number}/delete', 'AppAuthMiddleware@checkAuth', 'ApplicationSampleController@deleteIdSample')->run();
+/*delete*/
+$api->delete('/api/user', 'AppAuthMiddleware@checkAuth', 'UserSampleController@down')->run();
 
 //----------------------------------------------------------------------------------------------------------------------
 /*PATCH:NULL*/
 $api->patch('/api/update2', 'AppAuthMiddleware@checkAuth', 'ApplicationSampleController@patchSample')->run();
 $api->patch('/api/{id:number}/update2', 'AppAuthMiddleware@checkAuth', 'ApplicationSampleController@patchIdSample')->run();
+/*patch-fix*/
+$api->patch('/api/user', 'AppAuthMiddleware@checkAuth', 'UserSampleController@fix')->run();
 
 //----------------------------------------------------------------------------------------------------------------------
 //$api->get('/api/find-all', 'HandlerTasksController::getAllTasks')->run();

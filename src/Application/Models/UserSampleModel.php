@@ -33,56 +33,6 @@ class UserSampleModel extends BasicModel
     }
 
     /**
-     * @description Create #BasicModel
-     * @param array $fields #Optional
-     * @return bool
-     */
-    public function create(array $fields): bool
-    {
-        /*INSERT INTO {{{TABLE_NAME}}} {{{COLUMNS}}} VALUES {{{VALUES}}}*/
-        $this->qb
-            ->insert(['name', 'email', 'age'])
-            ->into('table')
-            ->values(['Rafaela Silveira', 'rafaela@email.com', '30']);
-
-        return parent::create($fields);
-    }
-
-    /**
-     * @description Read #BasicModel
-     * @param array $fields #Optional
-     * @return array
-    */
-    public function read(array $fields = []): array
-    {
-        $this->qb
-            ->select($fields, 'users', $this->alias)
-            ->join('products', 'p', 'p.user_id = u.id')
-            ->innerJoin('categories', 'c', 'c.id = p.category_id')
-            ->leftJoin('categories', 'c', 'c.id = p.category_id')
-            ->rightJoin('categories', 'c', 'c.id = p.category_id')
-            ->outerJoin('categories', 'c', 'c.id = p.category_id')
-            ->where("u.id <= '100'")
-            ->where("p.active = true", 'AND')
-            ->where('p.active = 1', 'OR')
-            ->groupBy('u.id')
-            ->orderBy('u.email')
-            ->limit('10')
-            ->builder()
-            ->persist();
-
-        /**
-         * @description First check if needed handler results
-         */
-        if (count($fields) == 0) {
-            $this->firstly();
-        }
-
-        return $this->result;
-
-    }
-
-    /**
      * @description Read Faker #BasicModel
      * @param array $fields #Optional
      * @return array
@@ -110,26 +60,122 @@ class UserSampleModel extends BasicModel
     }
 
     /**
+     * @description New #BasicModel
+     * @param array $values #Mandatory
+     * @return bool
+     */
+    public function new(array $values): bool
+    {
+        /*INSERT INTO table (name, email, age) VALUES ('Rafaela Silveira', 'rafaela@email.com', '30');*/
+        $this->qb
+            ->insert(['name', 'email', 'age'])
+            ->into('table')
+            ->values($values)
+            ->builder()
+            ->persist();
+
+        return true;
+    }
+
+    /**
+     * @description Read #BasicModel
+     * @param int $id #Mandatory
+     * @param array $fields #Optional
+     * @return array
+    */
+    public function read(int $id, array $fields): array
+    {
+        $this->qb
+            ->select($fields, 'users', $this->alias)
+            ->join('products', 'p', 'p.user_id = u.id')
+            ->innerJoin('categories', 'c', 'c.id = p.category_id')
+            ->leftJoin('categories', 'c', 'c.id = p.category_id')
+            ->rightJoin('categories', 'c', 'c.id = p.category_id')
+            ->outerJoin('categories', 'c', 'c.id = p.category_id')
+            ->where("u.id = '{$id}'")
+            ->builder()
+            ->persist();
+
+        /**
+         * @description First check if needed handler results
+         */
+        if (count($fields) == 0) {
+            $this->firstly();
+        }
+
+        return $this->result;
+
+    }
+
+    /**
+     * @description Read #BasicModel
+     * @param array $fields #Optional
+     * @return array
+     */
+    public function readAll(array $fields = []): array
+    {
+        /*SELECT id, name, email FROM users u JOIN products p p.user_id = u.id INNER JOIN categories c c.id = p.category_id LEFT JOIN categories c c.id = p.category_id RIGHT JOIN categories c c.id = p.category_id OUTER JOIN categories c c.id = p.category_id WHERE u.id <= '100' AND p.active = true OR p.active = 1 GROUP BY u.id ORDER BY u.email LIMIT 10;*/
+        $this->qb
+            ->select($fields, 'users', $this->alias)
+            ->join('products', 'p', 'p.user_id = u.id')
+            ->innerJoin('categories', 'c', 'c.id = p.category_id')
+            ->leftJoin('categories', 'c', 'c.id = p.category_id')
+            ->rightJoin('categories', 'c', 'c.id = p.category_id')
+            ->outerJoin('categories', 'c', 'c.id = p.category_id')
+            ->where("u.id = 'active'")
+            ->where("p.active = true", 'AND')
+            ->where('p.active = 1', 'OR')
+            ->groupBy('u.id')
+            ->orderBy('u.email')
+            ->limit('10')
+            ->builder()
+            ->persist();
+
+        /**
+         * @description First check if needed handler results
+         */
+        if (count($fields) == 0) {
+            $this->firstly();
+        }
+
+        return $this->result;
+
+    }
+
+    /**
      * @description Up #BasicModel
+     * @param string $param #Optional
      * @param array $fields #Optional
      * @return bool
      */
-    public function up(array $fields): bool
+    public function up(string $param, array $fields): bool
     {
         /**
          * ATUALIZAR TODOS OS CAMPOS
         */
-        /*UPDATE {{{TABLE_NAME}}} SET {{{FIELD}}} = {{{VALUE}}} WHERE {{{PARAM}}} = {{{VALUE}}} LIMIT 1;*/
+        /*
+         * UPDATE {{{TABLE_NAME}}}
+         * SET
+         *      {{{FIELD}}} = {{{VALUE}}}
+         * SET
+         *      {{{FIELD}}} = {{{VALUE}}}
+         * WHERE
+         *      {{{PARAM}}} = {{{VALUE}}}
+         * LIMIT 1;
+         *
+         */
         $this->qb
             ->update('table')
-            ->set('name', 'Marcos dos Santos')
-            ->set('idade', '44')
-            ->where('id = 123')
+            ->set('name', "{$fields[0]}")
+            ->set('email', "{$fields[1]}")
+            ->set('age', "{$fields[2]}")
+            ->where("id = '{$param}'")
+            ->where('email = marcosantos@gemail.com', 'AND')
             ->limit('1')
             ->builder()
             ->persist();
 
-        return parent::up($fields);
+        return true;
     }
 
     /**
@@ -142,36 +188,36 @@ class UserSampleModel extends BasicModel
     {
         /*DELETE FROM {{{TABLE_NAME}}} WHERE {{{PARAM}}} = {{{VALUE}}} LIMIT 1;*/
         $this->qb
-            ->delete()
+            ->delete("id = '{$id}'")
             ->from('table')
-            ->where("id = '123'")
-            ->limit('1')
+            ->limit('1', "delete")
             ->builder()
             ->persist();
 
-        return parent::down($id, $params);
+        return true;
     }
 
     /**
      * @description Fix #BasicModel
+     * @param string $param #Optional
      * @param array $fields #Optional
      * @return bool
      */
-    public function fix(array $fields): bool
+    public function fix(string $param, array $fields): bool
     {
         /**
          * ATUALIZAR APENAS UM CAMPO
          */
         /*UPDATE {{{TABLE_NAME}}} SET {{{FIELD}}} = {{{VALUE}}} WHERE {{{PARAM}}} = {{{VALUE}}} LIMIT 1;*/
         $this->qb
-            ->update('table')
+            ->patcher('table')
             ->set('idade', '44')
-            ->where('id = 123')
+            ->where("id = '{$param}'")
             ->limit('1')
             ->builder()
             ->persist();
 
-        return parent::fix($fields);
+        return true;
     }
 
 }
