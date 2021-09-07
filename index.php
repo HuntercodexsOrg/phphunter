@@ -36,33 +36,33 @@ $api->get('/api/static/read', 'AppAuthMiddleware@checkAuth', 'ApplicationSampleC
 $api->get('/api/test/user', 'AppAuthMiddleware@checkAuth', 'ApplicationSampleController@testSampleGet')->run();
 /*service/sample*/
 $api->get('/api/service/sample', 'AppAuthMiddleware@checkAuth', 'ApplicationSampleService@sampleServiceTest')->run();
-/*model-user-find*/
-$api->get('/api/user/{id:number}', 'AppAuthMiddleware@checkAuth', 'UserSampleController@find')->run();
-/*model-user-find-all*/
-$api->get('/api/user', 'AppAuthMiddleware@checkAuth', 'UserSampleController@findAll')->run();
 /*faker*/
 $api->get('/api/faker', 'AppAuthMiddleware@checkAuth', 'UserSampleController@findFaker')->run();
+/*model-user-find, example: http://local.phphunter.dockerized/api/user/444444*/
+$api->get('/api/user/{id:number}', 'AppAuthMiddleware@checkAuth', 'UserSampleController@find')->run();
+/*model-user-find-all, example: http://local.phphunter.dockerized/api/user*/
+$api->get('/api/user', 'AppAuthMiddleware@checkAuth', 'UserSampleController@findAll')->run();
 
 //----------------------------------------------------------------------------------------------------------------------
 /*PUT:UPDATE*/
 $api->put('/api/update', 'AppAuthMiddleware@checkAuth', 'ApplicationSampleController@updateSample')->run();
 $api->put('/api/{id:number}/update', 'AppAuthMiddleware@checkAuth', 'ApplicationSampleController@updateIdSample')->run();
-/*update*/
-$api->put('/api/user', 'AppAuthMiddleware@checkAuth', 'UserSampleController@up')->run();
+/*update, example: http://local.phphunter.dockerized/api/user/333333*/
+$api->put('/api/user/{id:number}', 'AppAuthMiddleware@checkAuth', 'UserSampleController@up')->run();
 
 //----------------------------------------------------------------------------------------------------------------------
 /*DELETE:DELETE*/
 $api->delete('/api/delete', 'AppAuthMiddleware@checkAuth', 'ApplicationSampleController@deleteSample')->run();
 $api->delete('/api/{id:number}/delete', 'AppAuthMiddleware@checkAuth', 'ApplicationSampleController@deleteIdSample')->run();
-/*delete*/
-$api->delete('/api/user', 'AppAuthMiddleware@checkAuth', 'UserSampleController@down')->run();
+/*delete, example: http://local.phphunter.dockerized/api/user/222222*/
+$api->delete('/api/user/{id:number}', 'AppAuthMiddleware@checkAuth', 'UserSampleController@down')->run();
 
 //----------------------------------------------------------------------------------------------------------------------
 /*PATCH:NULL*/
 $api->patch('/api/update2', 'AppAuthMiddleware@checkAuth', 'ApplicationSampleController@patchSample')->run();
 $api->patch('/api/{id:number}/update2', 'AppAuthMiddleware@checkAuth', 'ApplicationSampleController@patchIdSample')->run();
-/*patch-fix*/
-$api->patch('/api/user', 'AppAuthMiddleware@checkAuth', 'UserSampleController@fix')->run();
+/*patch-fix, example: http://local.phphunter.dockerized/api/user/111111*/
+$api->patch('/api/user/{id:number}', 'AppAuthMiddleware@checkAuth', 'UserSampleController@fix')->run();
 
 //----------------------------------------------------------------------------------------------------------------------
 //$api->get('/api/find-all', 'HandlerTasksController::getAllTasks')->run();

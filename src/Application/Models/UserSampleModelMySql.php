@@ -2,11 +2,10 @@
 
 namespace PhpHunter\Application\Models;
 
-use PhpHunter\Kernel\Models\BasicModel;
-use PhpHunter\Kernel\Builders\QueryBuilder;
+use PhpHunter\Kernel\Models\MySqlBasicModel;
 use PhpHunter\Framework\Faker\DatabaseFaker;
 
-class UserSampleModel extends BasicModel
+class UserSampleModelMySql extends MySqlBasicModel
 {
     protected array $dataMask = ['phone'];
     protected array $dataHidden = [];
@@ -29,7 +28,7 @@ class UserSampleModel extends BasicModel
      */
     public function __construct()
     {
-        $this->qb = new QueryBuilder();
+        parent::__construct();
     }
 
     /**
@@ -61,16 +60,16 @@ class UserSampleModel extends BasicModel
 
     /**
      * @description New #BasicModel
-     * @param array $values #Mandatory
+     * @param array $body_params #Mandatory
+     * @example [POST] http://local.phphunter.dockerized/api/user
      * @return bool
      */
-    public function new(array $values): bool
+    public function new(array $body_params): bool
     {
-        /*INSERT INTO table (name, email, age) VALUES ('Rafaela Silveira', 'rafaela@email.com', '30');*/
         $this->qb
-            ->insert(['name', 'email', 'age'])
-            ->into('table')
-            ->values($values)
+            ->insert(['name', 'email', 'phone', 'age'])
+            ->into('users')
+            ->values($body_params)
             ->builder()
             ->persist();
 
@@ -79,27 +78,28 @@ class UserSampleModel extends BasicModel
 
     /**
      * @description Read #BasicModel
-     * @param int $id #Mandatory
-     * @param array $fields #Optional
+     * @param array $uri_rest_params #Mandatory
+     * @param array $only_fields #Optional
+     * @example [GET] http://local.phphunter.dockerized/api/user/444444
      * @return array
     */
-    public function read(int $id, array $fields): array
+    public function read(array $uri_rest_params, array $only_fields = []): array
     {
         $this->qb
-            ->select($fields, 'users', $this->alias)
+            ->select($only_fields, 'users', $this->alias)
             ->join('products', 'p', 'p.user_id = u.id')
             ->innerJoin('categories', 'c', 'c.id = p.category_id')
             ->leftJoin('categories', 'c', 'c.id = p.category_id')
             ->rightJoin('categories', 'c', 'c.id = p.category_id')
             ->outerJoin('categories', 'c', 'c.id = p.category_id')
-            ->where("u.id = '{$id}'")
+            ->where("u.id = '{$uri_rest_params['id']}'")
             ->builder()
             ->persist();
 
         /**
          * @description First check if needed handler results
          */
-        if (count($fields) == 0) {
+        if (count($only_fields) == 0) {
             $this->firstly();
         }
 
@@ -108,23 +108,24 @@ class UserSampleModel extends BasicModel
     }
 
     /**
-     * @description Read #BasicModel
-     * @param array $fields #Optional
+     * @description Read All #BasicModel
+     * @param array $only_fields #Optional
+     * @param array $criteria #Optional
+     * @example [GET] http://local.phphunter.dockerized/api/user
      * @return array
      */
-    public function readAll(array $fields = []): array
+    public function readAll(array $only_fields = [], array $criteria = []): array
     {
-        /*SELECT id, name, email FROM users u JOIN products p p.user_id = u.id INNER JOIN categories c c.id = p.category_id LEFT JOIN categories c c.id = p.category_id RIGHT JOIN categories c c.id = p.category_id OUTER JOIN categories c c.id = p.category_id WHERE u.id <= '100' AND p.active = true OR p.active = 1 GROUP BY u.id ORDER BY u.email LIMIT 10;*/
         $this->qb
-            ->select($fields, 'users', $this->alias)
+            ->select($only_fields, 'users', $this->alias)
             ->join('products', 'p', 'p.user_id = u.id')
             ->innerJoin('categories', 'c', 'c.id = p.category_id')
             ->leftJoin('categories', 'c', 'c.id = p.category_id')
             ->rightJoin('categories', 'c', 'c.id = p.category_id')
             ->outerJoin('categories', 'c', 'c.id = p.category_id')
-            ->where("u.id = 'active'")
-            ->where("p.active = true", 'AND')
-            ->where('p.active = 1', 'OR')
+            ->where("u.active = '{$criteria['active']}'")
+            ->where("p.active = '{$criteria['active']}'", 'AND')
+            ->where("p.active = '{$criteria['active']}'", 'OR')
             ->groupBy('u.id')
             ->orderBy('u.email')
             ->limit('10')
@@ -134,7 +135,7 @@ class UserSampleModel extends BasicModel
         /**
          * @description First check if needed handler results
          */
-        if (count($fields) == 0) {
+        if (count($only_fields) == 0) {
             $this->firstly();
         }
 
@@ -144,33 +145,23 @@ class UserSampleModel extends BasicModel
 
     /**
      * @description Up #BasicModel
-     * @param string $param #Optional
-     * @param array $fields #Optional
+     * @param array $uri_rest_params #Optional
+     * @param array $body_params #Optional
+     * @example [PUT] http://local.phphunter.dockerized/api/user/333333
      * @return bool
      */
-    public function up(string $param, array $fields): bool
+    public function up(array $uri_rest_params, array $body_params): bool
     {
         /**
-         * ATUALIZAR TODOS OS CAMPOS
+         * Update all data from one id
         */
-        /*
-         * UPDATE {{{TABLE_NAME}}}
-         * SET
-         *      {{{FIELD}}} = {{{VALUE}}}
-         * SET
-         *      {{{FIELD}}} = {{{VALUE}}}
-         * WHERE
-         *      {{{PARAM}}} = {{{VALUE}}}
-         * LIMIT 1;
-         *
-         */
-        $this->qb
-            ->update('table')
-            ->set('name', "{$fields[0]}")
-            ->set('email', "{$fields[1]}")
-            ->set('age', "{$fields[2]}")
-            ->where("id = '{$param}'")
-            ->where('email = marcosantos@gemail.com', 'AND')
+         $this->qb
+            ->update('users')
+            ->set('name', "{$body_params['name']}")
+            ->set('email', "{$body_params['email']}")
+            ->set('age', "{$body_params['age']}")
+            ->where("id = '{$uri_rest_params['id']}'")
+            ->where("active = '1'", "AND")
             ->limit('1')
             ->builder()
             ->persist();
@@ -180,16 +171,18 @@ class UserSampleModel extends BasicModel
 
     /**
      * @description Down #BasicModel
-     * @param int $id #Mandatory
-     * @param array $params #Optional
+     * @param array $uri_rest_params #Mandatory
+     * @example [DELETE] http://local.phphunter.dockerized/api/user/222222
      * @return bool
      */
-    public function down(int $id, array $params = []): bool
+    public function down(array $uri_rest_params): bool
     {
-        /*DELETE FROM {{{TABLE_NAME}}} WHERE {{{PARAM}}} = {{{VALUE}}} LIMIT 1;*/
+        /**
+         * Delete all data from id
+        */
         $this->qb
-            ->delete("id = '{$id}'")
-            ->from('table')
+            ->delete("id = '{$uri_rest_params['id']}'")
+            ->from('users')
             ->limit('1', "delete")
             ->builder()
             ->persist();
@@ -199,20 +192,20 @@ class UserSampleModel extends BasicModel
 
     /**
      * @description Fix #BasicModel
-     * @param string $param #Optional
-     * @param array $fields #Optional
+     * @param array $uri_rest_params #Mandatory
+     * @param array $body_params #Mandatory
+     * @example [PATCH] http://local.phphunter.dockerized/api/user/111111
      * @return bool
      */
-    public function fix(string $param, array $fields): bool
+    public function fix(array $uri_rest_params, array $body_params): bool
     {
         /**
-         * ATUALIZAR APENAS UM CAMPO
+         * Update/Fix only one field
          */
-        /*UPDATE {{{TABLE_NAME}}} SET {{{FIELD}}} = {{{VALUE}}} WHERE {{{PARAM}}} = {{{VALUE}}} LIMIT 1;*/
         $this->qb
-            ->patcher('table')
-            ->set('idade', '44')
-            ->where("id = '{$param}'")
+            ->patcher('users')
+            ->set("name", "{$body_params['name']}")
+            ->where("id = '{$uri_rest_params['id']}'")
             ->limit('1')
             ->builder()
             ->persist();
