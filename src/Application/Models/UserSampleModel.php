@@ -5,9 +5,9 @@ namespace PhpHunter\Application\Models;
 use PhpHunter\Kernel\Models\MySqlBasicModel;
 use PhpHunter\Framework\Faker\DatabaseFaker;
 
-class UserSampleModelMySql extends MySqlBasicModel
+class UserSampleModel extends MySqlBasicModel
 {
-    protected array $dataMask = ['phone'];
+    protected array $dataMask = ['password'];
     protected array $dataHidden = [];
 
     /**
@@ -66,10 +66,23 @@ class UserSampleModelMySql extends MySqlBasicModel
      */
     public function new(array $body_params): bool
     {
+        $create_at = $updated_at = date("Y-m-d H:i:s");
+        $values = [
+            null,
+            "{$body_params['name']}",
+            "{$body_params['email']}",
+            "{$body_params['age']}",
+            "{$body_params['address']}",
+            "{$body_params['password']}",
+            "{$create_at}",
+            "{$updated_at}",
+            1
+        ];
+
         $this->qb
-            ->insert(['name', 'email', 'phone', 'age'])
+            ->insert(['id', 'name', 'email', 'age', 'address', 'password', 'create_at', 'updated_at', 'active'])
             ->into('users')
-            ->values($body_params)
+            ->values($values)
             ->builder()
             ->persist();
 
@@ -85,7 +98,7 @@ class UserSampleModelMySql extends MySqlBasicModel
     */
     public function read(array $uri_rest_params, array $only_fields = []): array
     {
-        $this->qb
+        /*$this->qb
             ->select($only_fields, 'users', $this->alias)
             ->join('products', 'p', 'p.user_id = u.id')
             ->innerJoin('categories', 'c', 'c.id = p.category_id')
@@ -94,7 +107,13 @@ class UserSampleModelMySql extends MySqlBasicModel
             ->outerJoin('categories', 'c', 'c.id = p.category_id')
             ->where("u.id = '{$uri_rest_params['id']}'")
             ->builder()
-            ->persist();
+            ->persist();*/
+
+        $this->result = $this->qb
+            ->select($only_fields, 'users', $this->alias)
+            ->where("u.id = '{$uri_rest_params['id']}'")
+            ->builder()
+            ->run();
 
         /**
          * @description First check if needed handler results
@@ -116,7 +135,7 @@ class UserSampleModelMySql extends MySqlBasicModel
      */
     public function readAll(array $only_fields = [], array $criteria = []): array
     {
-        $this->qb
+        /*$this->result = $this->qb
             ->select($only_fields, 'users', $this->alias)
             ->join('products', 'p', 'p.user_id = u.id')
             ->innerJoin('categories', 'c', 'c.id = p.category_id')
@@ -130,7 +149,16 @@ class UserSampleModelMySql extends MySqlBasicModel
             ->orderBy('u.email')
             ->limit('10')
             ->builder()
-            ->persist();
+            ->run();*/
+
+        $this->result = $this->qb
+            ->select($only_fields, 'users', $this->alias)
+            ->where("u.active = '{$criteria['active']}'")
+            ->groupBy('u.id')
+            ->orderBy('u.email')
+            ->limit('10')
+            ->builder()
+            ->run();
 
         /**
          * @description First check if needed handler results
@@ -155,11 +183,27 @@ class UserSampleModelMySql extends MySqlBasicModel
         /**
          * Update all data from one id
         */
-         $this->qb
+        /*$this->qb
             ->update('users')
             ->set('name', "{$body_params['name']}")
             ->set('email', "{$body_params['email']}")
             ->set('age', "{$body_params['age']}")
+            ->where("id = '{$uri_rest_params['id']}'")
+            ->where("active = '1'", "AND")
+            ->limit('1')
+            ->builder()
+            ->persist();*/
+
+        $updated_at = date("Y-m-d H:i:s");
+
+        $this->qb
+            ->update('users')
+            ->set('name', "{$body_params['name']}")
+            ->set('email', "{$body_params['email']}")
+            ->set('age', "{$body_params['age']}")
+            ->set('address', "{$body_params['address']}")
+            ->set('password', "{$body_params['password']}")
+            ->set('updated_at', "{$updated_at}")
             ->where("id = '{$uri_rest_params['id']}'")
             ->where("active = '1'", "AND")
             ->limit('1')

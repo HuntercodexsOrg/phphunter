@@ -2,10 +2,8 @@
 
 namespace PhpHunter\Application\Controllers;
 
-use PDO;
-use PDOException;
-use Exception;
-use PhpHunter\Application\Models\UserSampleModelMySql;
+use PhpHunter\Application\Models\UserSampleModel;
+use PhpHunter\Framework\Settings\AppSetting;
 use PhpHunter\Kernel\Controllers\ResponseController;
 use PhpHunter\Kernel\Abstractions\ParametersAbstract;
 
@@ -20,7 +18,7 @@ class UserSampleController extends ParametersAbstract
     public function __construct()
     {
         $this->initParams(true);
-        $this->userModel = new UserSampleModelMySql();
+        $this->userModel = new UserSampleModel();
         $this->response = new ResponseController();
     }
 
@@ -40,29 +38,11 @@ class UserSampleController extends ParametersAbstract
 
     /**
      * @description New
+     * @example [POST] http://local.phphunter.dockerized/api/user
      * @return void
      */
     public function new(): void
     {
-        $libDriver = "mysql";
-        $ipHost = "192.168.15.13";
-        $idPort = 3308;
-        $dbname = "dbaname";
-        $user = "root";
-        $pass = "root";
-
-        try {
-            $con = new PDO("{$libDriver}:host={$ipHost}:{$idPort};dbname={$dbname}", "{$user}", "{$pass}");
-            $con->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
-            prd($con->query("SELECT * FROM users;")->fetchAll());
-
-        } catch (PDOException $e) {
-            $mensagem = "Drivers disponiveis: " . implode(",", PDO::getAvailableDrivers());
-            $mensagem .= "\nErro: " . $e->getMessage();
-            throw new Exception($mensagem);
-        }
-
         $result = $this->userModel->new($this->initParams);
         $this->response->jsonResponse([
             "result" => $result,
@@ -95,7 +75,7 @@ class UserSampleController extends ParametersAbstract
         $criteria = [
             "active" => 1
         ];
-        $result = $this->userModel->readAll(["id", "name", "email"], $criteria);
+        $result = $this->userModel->readAll(["name", "email", "address"], $criteria);
         $this->response->jsonResponse([
             "result" => $result,
         ], 200);

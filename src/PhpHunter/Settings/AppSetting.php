@@ -6,7 +6,7 @@
 
 namespace PhpHunter\Framework\Settings;
 
-class AppSetting
+class AppSetting extends ConnectionSetting
 {
     /**
      * @description Get Config
@@ -39,7 +39,7 @@ class AppSetting
             "templates" => [],
 
             //Define here the databases
-            "databases" => [],
+            "databases" => parent::getDatabaseConnection(),
 
             "debug" => true
         ];
