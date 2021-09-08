@@ -2,10 +2,11 @@
 
 namespace PhpHunter\Application\Models;
 
-use PhpHunter\Kernel\Models\MySqlBasicModel;
+//use PhpHunter\Kernel\Models\MySqlBasicModel;
+use PhpHunter\Kernel\Models\MsSqlBasicModel;
 use PhpHunter\Framework\Faker\DatabaseFaker;
 
-class UserSampleModel extends MySqlBasicModel
+class UserSampleModel extends /*MySqlBasicModel*/ MsSqlBasicModel
 {
     protected array $dataMask = ['password'];
     protected array $dataHidden = [];

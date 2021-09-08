@@ -26,12 +26,12 @@ class ConnectionSetting
                 "password" => "root",
             ],
             "mssql" => [
-                "driver"   => "",
-                "server"   => "",
-                "port"     => "",
-                "database" => "",
-                "user"     => "",
-                "password" => "",
+                "driver"   => "sqlsrv",
+                "server"   => "192.168.15.13",
+                "port"     => "1433",
+                "database" => "dbaname",
+                "user"     => "SA",
+                "password" => "123@Mudar#",
             ],
             "postgres" => [
                 "driver"   => "",
