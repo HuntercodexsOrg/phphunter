@@ -2,15 +2,16 @@
 
 namespace PhpHunter\Application\Models;
 
+use PhpHunter\Kernel\Builders\QueryBuilder;
+use PhpHunter\Kernel\Models\BasicModel;
 //use PhpHunter\Kernel\Models\MySqlBasicModel;
-use PhpHunter\Kernel\Models\MsSqlBasicModel;
+//use PhpHunter\Kernel\Models\MsSqlBasicModel;
 use PhpHunter\Framework\Faker\DatabaseFaker;
 
-class UserSampleModel extends /*MySqlBasicModel*/ MsSqlBasicModel
+class UsersSampleModel extends /*MySqlBasicModel*/ /*MsSqlBasicModel*/ BasicModel
 {
     protected array $dataMask = ['password'];
     protected array $dataHidden = [];
-
     /**
      * @NOTE (Traduzir:Ingles)
      * Ao definir essa propriedade com os campos a serem retornados, sera feita a
@@ -21,15 +22,19 @@ class UserSampleModel extends /*MySqlBasicModel*/ MsSqlBasicModel
      * informados e não haverá nenhum processo de filtragem
     */
     protected array $dataOnly = [];
-
-    protected string $alias = 'u';
+    protected array $dataFill = [];
 
     /**
      * @description Constructor Class
      */
     public function __construct()
     {
-        parent::__construct();
+        //$this->dbType = 'mysql';
+//        $this->dataMask = ['password'];
+//        $this->dataHidden = [];
+//        $this->dataOnly = [];
+//        $this->dataFill = [];
+        $this->setBasicModel('mysql');
     }
 
     /**
@@ -43,9 +48,9 @@ class UserSampleModel extends /*MySqlBasicModel*/ MsSqlBasicModel
          * @description Query Execute (FAKER)
          */
         if (count($fields) > 0) {
-            $this->result = DatabaseFaker::dataFakerOnlyFields('users', $fields);
+            $this->dataResult = DatabaseFaker::dataFakerOnlyFields('users', $fields);
         } else {
-            $this->result = DatabaseFaker::dataFaker('users');
+            $this->dataResult = DatabaseFaker::dataFaker('users');
         }
 
         /**
@@ -55,7 +60,7 @@ class UserSampleModel extends /*MySqlBasicModel*/ MsSqlBasicModel
             $this->firstly();
         }
 
-        return $this->result;
+        return $this->dataResult;
 
     }
 
@@ -80,27 +85,39 @@ class UserSampleModel extends /*MySqlBasicModel*/ MsSqlBasicModel
             1
         ];
 
-        $this->qb
+        /*$this->qb
             ->insert(['id', 'name', 'email', 'age', 'address', 'password', 'create_at', 'updated_at', 'active'])
             ->into('users')
             ->values($values)
             ->builder()
-            ->persist();
+            ->persist();*/
+
+        /*$this
+            ->insert(['id', 'name', 'email', 'age', 'address', 'password', 'create_at', 'updated_at', 'active'])
+            ->into('users')
+            ->values($values)
+            ->builder()
+            ->persist();*/
+
+        $this
+            ->insert($values)
+            ->builder()
+            ->save();
 
         return true;
     }
 
     /**
-     * @description Read #BasicModel
-     * @param array $uri_rest_params #Mandatory
+     * @description Find [READ:HTTP/GET]
+     * @param int|string $id #Mandatory
      * @param array $only_fields #Optional
      * @example [GET] http://local.phphunter.dockerized/api/user/444444
      * @return array
     */
-    public function read(array $uri_rest_params, array $only_fields = []): array
+    public function findId(int|string $id, array $only_fields = []): array
     {
         /*$this->qb
-            ->select($only_fields, 'users', $this->alias)
+            ->select($only_fields, 'users')
             ->join('products', 'p', 'p.user_id = u.id')
             ->innerJoin('categories', 'c', 'c.id = p.category_id')
             ->leftJoin('categories', 'c', 'c.id = p.category_id')
@@ -110,9 +127,9 @@ class UserSampleModel extends /*MySqlBasicModel*/ MsSqlBasicModel
             ->builder()
             ->persist();*/
 
-        $this->result = $this->qb
-            ->select($only_fields, 'users', $this->alias)
-            ->where("u.id = '{$uri_rest_params['id']}'")
+        $this
+            ->select($only_fields)
+            ->where("u.id = '{$id}'")
             ->builder()
             ->run();
 
@@ -123,21 +140,21 @@ class UserSampleModel extends /*MySqlBasicModel*/ MsSqlBasicModel
             $this->firstly();
         }
 
-        return $this->result;
+        return $this->dataResult;
 
     }
 
     /**
-     * @description Read All #BasicModel
+     * @description Find All #BasicModel
      * @param array $only_fields #Optional
      * @param array $criteria #Optional
      * @example [GET] http://local.phphunter.dockerized/api/user
      * @return array
      */
-    public function readAll(array $only_fields = [], array $criteria = []): array
+    public function findAll(array $only_fields = [], array $criteria = []): array
     {
-        /*$this->result = $this->qb
-            ->select($only_fields, 'users', $this->alias)
+        /*$this->dataResult = $this->qb
+            ->select($only_fields, 'users')
             ->join('products', 'p', 'p.user_id = u.id')
             ->innerJoin('categories', 'c', 'c.id = p.category_id')
             ->leftJoin('categories', 'c', 'c.id = p.category_id')
@@ -152,8 +169,24 @@ class UserSampleModel extends /*MySqlBasicModel*/ MsSqlBasicModel
             ->builder()
             ->run();*/
 
-        $this->result = $this->qb
-            ->select($only_fields, 'users', $this->alias)
+        /*$this->dataResult = $this->qb
+            ->select($only_fields, 'users')
+            ->where("u.active = '{$criteria['active']}'")
+            ->groupBy('u.id')
+            ->orderBy('u.email')
+            ->limit('10')
+            ->builder()
+            ->run();*/
+
+        /**
+         * @TIP Edit here the criteria to data handler of the model in this operation
+        */
+        if (count($criteria) == 0) {
+            $criteria['active'] = 1;
+        }
+
+        $this
+            ->select($only_fields)
             ->where("u.active = '{$criteria['active']}'")
             ->groupBy('u.id')
             ->orderBy('u.email')
@@ -168,19 +201,23 @@ class UserSampleModel extends /*MySqlBasicModel*/ MsSqlBasicModel
             $this->firstly();
         }
 
-        return $this->result;
+        //sort($this->dataResult);
+
+        return $this->dataResult;
 
     }
 
     /**
-     * @description Up #BasicModel
-     * @param array $uri_rest_params #Optional
+     * @description Overwrite #BasicModel
+     * @param int|string $id #Optional
      * @param array $body_params #Optional
      * @example [PUT] http://local.phphunter.dockerized/api/user/333333
      * @return bool
      */
-    public function up(array $uri_rest_params, array $body_params): bool
+    public function overwrite(int|string $id, array $body_params): bool
     {
+        $updated_at = date("Y-m-d H:i:s");
+
         /**
          * Update all data from one id
         */
@@ -195,9 +232,7 @@ class UserSampleModel extends /*MySqlBasicModel*/ MsSqlBasicModel
             ->builder()
             ->persist();*/
 
-        $updated_at = date("Y-m-d H:i:s");
-
-        $this->qb
+        /*$this->qb
             ->update('users')
             ->set('name', "{$body_params['name']}")
             ->set('email', "{$body_params['email']}")
@@ -209,51 +244,78 @@ class UserSampleModel extends /*MySqlBasicModel*/ MsSqlBasicModel
             ->where("active = '1'", "AND")
             ->limit('1')
             ->builder()
-            ->persist();
+            ->persist();*/
+
+        $this
+            ->update()
+            ->set('name', "{$body_params['name']}")
+            ->set('email', "{$body_params['email']}")
+            ->set('age', "{$body_params['age']}")
+            ->set('address', "{$body_params['address']}")
+            ->set('password', "{$body_params['password']}")
+            ->set('updated_at', "{$updated_at}")
+            ->where("id = '{$id}'")
+            ->where("active = '1'", "AND")
+            ->limit('1')
+            ->builder()
+            ->save();
 
         return true;
     }
 
     /**
-     * @description Down #BasicModel
-     * @param array $uri_rest_params #Mandatory
+     * @description Remove #BasicModel
+     * @param int|string $id #Mandatory
      * @example [DELETE] http://local.phphunter.dockerized/api/user/222222
      * @return bool
      */
-    public function down(array $uri_rest_params): bool
+    public function remove(int|string $id): bool
     {
         /**
          * Delete all data from id
         */
-        $this->qb
-            ->delete("id = '{$uri_rest_params['id']}'")
+        /*$this->qb
+            ->delete("id = '{$id}'")
             ->from('users')
             ->limit('1', "delete")
             ->builder()
-            ->persist();
+            ->persist();*/
+
+        $this
+            ->delete($id)
+            ->builder()
+            ->save();
 
         return true;
     }
 
     /**
      * @description Fix #BasicModel
-     * @param array $uri_rest_params #Mandatory
+     * @param int|string $id #Mandatory
      * @param array $body_params #Mandatory
      * @example [PATCH] http://local.phphunter.dockerized/api/user/111111
      * @return bool
      */
-    public function fix(array $uri_rest_params, array $body_params): bool
+    public function patch(int|string $id, array $body_params): bool
     {
         /**
          * Update/Fix only one field
          */
-        $this->qb
+        /*$this->qb
             ->patcher('users')
             ->set("name", "{$body_params['name']}")
             ->where("id = '{$uri_rest_params['id']}'")
             ->limit('1')
             ->builder()
-            ->persist();
+            ->persist();*/
+
+        $this
+            ->patcher()
+            ->set("name", "{$body_params['name']}")
+            ->where("id = '{$id}'")
+            ->limit('1')
+            ->builder()
+            ->save();
 
         return true;
     }

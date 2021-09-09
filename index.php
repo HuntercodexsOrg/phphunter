@@ -24,7 +24,7 @@ $api->post('/api/service/file/send', 'AppAuthMiddleware@checkAuth', 'Application
 /*test*/
 $api->post('/api/test/user', 'AppAuthMiddleware@checkAuth', 'ApplicationSampleController@testSamplePost')->run();
 /*new*/
-$api->post('/api/user', 'AppAuthMiddleware@checkAuth', 'UserSampleController@new')->run();
+$api->post('/api/user', 'AppAuthMiddleware@checkAuth', 'UserSampleController@add')->run();
 
 //----------------------------------------------------------------------------------------------------------------------
 /*GET:READ*/
@@ -41,7 +41,7 @@ $api->get('/api/faker', 'AppAuthMiddleware@checkAuth', 'UserSampleController@fin
 /*model-user-find, example: http://local.phphunter.dockerized/api/user/444444*/
 $api->get('/api/user/{id:number}', 'AppAuthMiddleware@checkAuth', 'UserSampleController@find')->run();
 /*model-user-find-all, example: http://local.phphunter.dockerized/api/user*/
-$api->get('/api/user', 'AppAuthMiddleware@checkAuth', 'UserSampleController@findAll')->run();
+$api->get('/api/user', 'AppAuthMiddleware@checkAuth', 'UserSampleController@all')->run();
 
 //----------------------------------------------------------------------------------------------------------------------
 /*PUT:UPDATE*/

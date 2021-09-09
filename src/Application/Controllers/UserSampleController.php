@@ -2,8 +2,7 @@
 
 namespace PhpHunter\Application\Controllers;
 
-use PhpHunter\Application\Models\UserSampleModel;
-use PhpHunter\Framework\Settings\AppSetting;
+use PhpHunter\Application\Models\UsersSampleModel;
 use PhpHunter\Kernel\Controllers\ResponseController;
 use PhpHunter\Kernel\Abstractions\ParametersAbstract;
 
@@ -18,7 +17,6 @@ class UserSampleController extends ParametersAbstract
     public function __construct()
     {
         $this->initParams(true);
-        $this->userModel = new UserSampleModel();
         $this->response = new ResponseController();
     }
 
@@ -28,6 +26,7 @@ class UserSampleController extends ParametersAbstract
      */
     public function findFaker(): void
     {
+        $this->userModel = new UsersSampleModel();
         /*Exemplo para query sql: ['u.id', 'u.name', 'u.email']*/
         /*Exemplo comum: ['id', 'name', 'email']*/
         $result = $this->userModel->readFaker(['id', 'name', 'email']);
@@ -41,9 +40,10 @@ class UserSampleController extends ParametersAbstract
      * @example [POST] http://local.phphunter.dockerized/api/user
      * @return void
      */
-    public function new(): void
+    public function add(): void
     {
-        $result = $this->userModel->new($this->initParams);
+        //$result = $this->userModel->new($this->initParams);
+        $result = UsersSampleModel::add($this->initParams);
         $this->response->jsonResponse([
             "result" => $result,
         ], 200);
@@ -57,25 +57,27 @@ class UserSampleController extends ParametersAbstract
      */
     public function find(array $uri_rest_params): void
     {
-        $result = $this->userModel->read($uri_rest_params, ["id", "name", "email"]);
+        //$result = $this->userModel->read($uri_rest_params, ["id", "name", "email"]);
+        $result = UsersSampleModel::find($uri_rest_params['id']);
         $this->response->jsonResponse([
             "result" => $result,
         ], 200);
     }
 
     /**
-     * @description Find All
+     * @description All
      * @example [GET] http://local.phphunter.dockerized/api/user
      * @return void
      */
-    public function findAll(): void
+    public function all(): void
     {
         /*Exemplo para query sql: ['u.id', 'u.name', 'u.email']*/
         /*Exemplo comum: ['id', 'name', 'email']*/
         $criteria = [
             "active" => 1
         ];
-        $result = $this->userModel->readAll(["name", "email", "address"], $criteria);
+        //$result = $this->userModel->all(["name", "email", "address"], $criteria);
+        $result = UsersSampleModel::all();
         $this->response->jsonResponse([
             "result" => $result,
         ], 200);
@@ -89,7 +91,8 @@ class UserSampleController extends ParametersAbstract
      */
     public function up(array $uri_rest_params): void
     {
-        $result = $this->userModel->up($uri_rest_params, $this->initParams);
+        //$result = $this->userModel->up($uri_rest_params, $this->initParams);
+        $result = UsersSampleModel::up($uri_rest_params['id'], $this->initParams);
         $this->response->jsonResponse([
             "result" => $result,
         ], 200);
@@ -103,7 +106,8 @@ class UserSampleController extends ParametersAbstract
      */
     public function down(array $uri_rest_params): void
     {
-        $result = $this->userModel->down($uri_rest_params);
+        //$result = $this->userModel->down($uri_rest_params);
+        $result = UsersSampleModel::down($uri_rest_params['id']);
         $this->response->jsonResponse([
             "result" => $result,
         ], 200);
@@ -117,7 +121,8 @@ class UserSampleController extends ParametersAbstract
      */
     public function fix(array $uri_rest_params): void
     {
-        $result = $this->userModel->fix($uri_rest_params, $this->initParams);
+        //$result = $this->userModel->fix($uri_rest_params, $this->initParams);
+        $result = UsersSampleModel::fix($uri_rest_params['id'], $this->initParams);
         $this->response->jsonResponse([
             "result" => $result,
         ], 200);
