@@ -49,6 +49,14 @@ class ConnectionSetting
                 "user"     => "",
                 "password" => "",
             ],
+            "sqlite" => [
+                "driver"   => "",
+                "server"   => "",
+                "port"     => "",
+                "database" => "",
+                "user"     => "",
+                "password" => "",
+            ],
         ];
     }
 }

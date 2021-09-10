@@ -9,7 +9,6 @@ use PhpHunter\Kernel\Abstractions\ParametersAbstract;
 class UserSampleController extends ParametersAbstract
 {
     private object $response;
-    private object $userModel;
 
     /**
      * @description Constructor Class
@@ -26,10 +25,10 @@ class UserSampleController extends ParametersAbstract
      */
     public function findFaker(): void
     {
-        $this->userModel = new UsersSampleModel();
+        $userModel = new UsersSampleModel();
         /*Exemplo para query sql: ['u.id', 'u.name', 'u.email']*/
         /*Exemplo comum: ['id', 'name', 'email']*/
-        $result = $this->userModel->readFaker(['id', 'name', 'email']);
+        $result = $userModel->readFaker(['id', 'name', 'email']);
         $this->response->jsonResponse([
             "result" => $result,
         ], 200);

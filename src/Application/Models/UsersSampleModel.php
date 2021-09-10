@@ -2,13 +2,10 @@
 
 namespace PhpHunter\Application\Models;
 
-use PhpHunter\Kernel\Builders\QueryBuilder;
 use PhpHunter\Kernel\Models\BasicModel;
-//use PhpHunter\Kernel\Models\MySqlBasicModel;
-//use PhpHunter\Kernel\Models\MsSqlBasicModel;
 use PhpHunter\Framework\Faker\DatabaseFaker;
 
-class UsersSampleModel extends /*MySqlBasicModel*/ /*MsSqlBasicModel*/ BasicModel
+class UsersSampleModel extends BasicModel
 {
     protected array $dataMask = ['password'];
     protected array $dataHidden = [];
@@ -18,8 +15,8 @@ class UsersSampleModel extends /*MySqlBasicModel*/ /*MsSqlBasicModel*/ BasicMode
      * consulta na base de dados e depois sera filtrado o resultado da consulta
      * para extrair apenas os campos informados, caso seja necessário trazer apenas
      * os dados referentes ao(s) campo(s) específico(s) da tabela, use argumentos para
-     * passar ao método select do model, assim a consulta será feita apenas com os campos
-     * informados e não haverá nenhum processo de filtragem
+     * passar ao método select do model, assim a operação será feita apenas utilizando os
+     * parâmetros informados e não haverá nenhum processo de filtragem
     */
     protected array $dataOnly = [];
     protected array $dataFill = [];
@@ -29,11 +26,6 @@ class UsersSampleModel extends /*MySqlBasicModel*/ /*MsSqlBasicModel*/ BasicMode
      */
     public function __construct()
     {
-        //$this->dbType = 'mysql';
-//        $this->dataMask = ['password'];
-//        $this->dataHidden = [];
-//        $this->dataOnly = [];
-//        $this->dataFill = [];
         $this->setBasicModel('mysql');
     }
 
@@ -73,7 +65,9 @@ class UsersSampleModel extends /*MySqlBasicModel*/ /*MsSqlBasicModel*/ BasicMode
     public function new(array $body_params): bool
     {
         $create_at = $updated_at = date("Y-m-d H:i:s");
-        $values = [
+
+        //MYSQL
+        /*$values = [
             null,
             "{$body_params['name']}",
             "{$body_params['email']}",
@@ -83,21 +77,19 @@ class UsersSampleModel extends /*MySqlBasicModel*/ /*MsSqlBasicModel*/ BasicMode
             "{$create_at}",
             "{$updated_at}",
             1
+        ];*/
+
+        //MSSQL
+        $values = [
+            "{$body_params['name']}",
+            "{$body_params['email']}",
+            "{$body_params['age']}",
+            "{$body_params['address']}",
+            "{$body_params['password']}",
+            "{$create_at}",
+            "{$updated_at}",
+            1
         ];
-
-        /*$this->qb
-            ->insert(['id', 'name', 'email', 'age', 'address', 'password', 'create_at', 'updated_at', 'active'])
-            ->into('users')
-            ->values($values)
-            ->builder()
-            ->persist();*/
-
-        /*$this
-            ->insert(['id', 'name', 'email', 'age', 'address', 'password', 'create_at', 'updated_at', 'active'])
-            ->into('users')
-            ->values($values)
-            ->builder()
-            ->persist();*/
 
         $this
             ->insert($values)
@@ -116,17 +108,6 @@ class UsersSampleModel extends /*MySqlBasicModel*/ /*MsSqlBasicModel*/ BasicMode
     */
     public function findId(int|string $id, array $only_fields = []): array
     {
-        /*$this->qb
-            ->select($only_fields, 'users')
-            ->join('products', 'p', 'p.user_id = u.id')
-            ->innerJoin('categories', 'c', 'c.id = p.category_id')
-            ->leftJoin('categories', 'c', 'c.id = p.category_id')
-            ->rightJoin('categories', 'c', 'c.id = p.category_id')
-            ->outerJoin('categories', 'c', 'c.id = p.category_id')
-            ->where("u.id = '{$uri_rest_params['id']}'")
-            ->builder()
-            ->persist();*/
-
         $this
             ->select($only_fields)
             ->where("u.id = '{$id}'")
@@ -153,31 +134,6 @@ class UsersSampleModel extends /*MySqlBasicModel*/ /*MsSqlBasicModel*/ BasicMode
      */
     public function findAll(array $only_fields = [], array $criteria = []): array
     {
-        /*$this->dataResult = $this->qb
-            ->select($only_fields, 'users')
-            ->join('products', 'p', 'p.user_id = u.id')
-            ->innerJoin('categories', 'c', 'c.id = p.category_id')
-            ->leftJoin('categories', 'c', 'c.id = p.category_id')
-            ->rightJoin('categories', 'c', 'c.id = p.category_id')
-            ->outerJoin('categories', 'c', 'c.id = p.category_id')
-            ->where("u.active = '{$criteria['active']}'")
-            ->where("p.active = '{$criteria['active']}'", 'AND')
-            ->where("p.active = '{$criteria['active']}'", 'OR')
-            ->groupBy('u.id')
-            ->orderBy('u.email')
-            ->limit('10')
-            ->builder()
-            ->run();*/
-
-        /*$this->dataResult = $this->qb
-            ->select($only_fields, 'users')
-            ->where("u.active = '{$criteria['active']}'")
-            ->groupBy('u.id')
-            ->orderBy('u.email')
-            ->limit('10')
-            ->builder()
-            ->run();*/
-
         /**
          * @TIP Edit here the criteria to data handler of the model in this operation
         */
@@ -185,10 +141,37 @@ class UsersSampleModel extends /*MySqlBasicModel*/ /*MsSqlBasicModel*/ BasicMode
             $criteria['active'] = 1;
         }
 
-        $this
+        //MYSQL
+        /*$this
             ->select($only_fields)
             ->where("u.active = '{$criteria['active']}'")
             ->groupBy('u.id')
+            ->orderBy('u.email')
+            ->limit('10')
+            ->builder()
+            ->run();*/
+
+        //MSSQL
+        $this
+            ->select(['u.id', 'u.name', 'u.email', 'u.age', 'u.address', 'u.create_at', 'u.updated_at', 'u.active'])
+            ->join("products", "p", "p.user_id = u.id AND p.active = 1")
+            ->innerJoin("products", "p", "p.user_id = u.id")
+            ->outerJoin("products", "p", "p.user_id = u.id")
+            ->leftJoin("products", "p", "p.user_id = u.id")
+            ->rightJoin("products", "p", "p.user_id = u.id")
+            ->fullJoin("products", "p", "p.user_id = u.id")
+            ->crossJoin("products", "p", "p.user_id = u.id")
+            ->fullOuterJoin("products", "p", "p.user_id = u.id")
+            ->union()
+            ->select(['u.id', 'u.name', 'u.email', 'u.age', 'u.address', 'u.create_at', 'u.updated_at', 'u.active'])
+            ->unionAll()
+            ->select(['u.id', 'u.name', 'u.email', 'u.age', 'u.address', 'u.create_at', 'u.updated_at', 'u.active'])
+            ->intersect()
+            ->select(['u.id', 'u.name', 'u.email', 'u.age', 'u.address', 'u.create_at', 'u.updated_at', 'u.active'])
+            ->except()
+            ->select(['u.id', 'u.name', 'u.email', 'u.age', 'u.address', 'u.create_at', 'u.updated_at', 'u.active'])
+            ->where("u.active = '{$criteria['active']}'")
+            ->groupBy('u.id, u.name, u.email, u.age, u.address, u.create_at, u.updated_at, u.active')
             ->orderBy('u.email')
             ->limit('10')
             ->builder()
@@ -201,6 +184,9 @@ class UsersSampleModel extends /*MySqlBasicModel*/ /*MsSqlBasicModel*/ BasicMode
             $this->firstly();
         }
 
+        /**
+         * @TIP If needed, sort the dataResult before display
+         */
         //sort($this->dataResult);
 
         return $this->dataResult;
@@ -221,31 +207,6 @@ class UsersSampleModel extends /*MySqlBasicModel*/ /*MsSqlBasicModel*/ BasicMode
         /**
          * Update all data from one id
         */
-        /*$this->qb
-            ->update('users')
-            ->set('name', "{$body_params['name']}")
-            ->set('email', "{$body_params['email']}")
-            ->set('age', "{$body_params['age']}")
-            ->where("id = '{$uri_rest_params['id']}'")
-            ->where("active = '1'", "AND")
-            ->limit('1')
-            ->builder()
-            ->persist();*/
-
-        /*$this->qb
-            ->update('users')
-            ->set('name', "{$body_params['name']}")
-            ->set('email', "{$body_params['email']}")
-            ->set('age', "{$body_params['age']}")
-            ->set('address', "{$body_params['address']}")
-            ->set('password', "{$body_params['password']}")
-            ->set('updated_at', "{$updated_at}")
-            ->where("id = '{$uri_rest_params['id']}'")
-            ->where("active = '1'", "AND")
-            ->limit('1')
-            ->builder()
-            ->persist();*/
-
         $this
             ->update()
             ->set('name', "{$body_params['name']}")
@@ -274,13 +235,6 @@ class UsersSampleModel extends /*MySqlBasicModel*/ /*MsSqlBasicModel*/ BasicMode
         /**
          * Delete all data from id
         */
-        /*$this->qb
-            ->delete("id = '{$id}'")
-            ->from('users')
-            ->limit('1', "delete")
-            ->builder()
-            ->persist();*/
-
         $this
             ->delete($id)
             ->builder()
@@ -301,14 +255,6 @@ class UsersSampleModel extends /*MySqlBasicModel*/ /*MsSqlBasicModel*/ BasicMode
         /**
          * Update/Fix only one field
          */
-        /*$this->qb
-            ->patcher('users')
-            ->set("name", "{$body_params['name']}")
-            ->where("id = '{$uri_rest_params['id']}'")
-            ->limit('1')
-            ->builder()
-            ->persist();*/
-
         $this
             ->patcher()
             ->set("name", "{$body_params['name']}")
