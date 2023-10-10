@@ -28,6 +28,7 @@ tasks*.inf
 /libraries/css/bootstrap
 /libraries/js/jshunter
 /libraries/js/jquery
+node_modules
 
 # Framework (Comment when branch is not framework)
 #----------------------------------------------------------------------
