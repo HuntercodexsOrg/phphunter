@@ -1,0 +1,90 @@
+#!/bin/bash
+
+################################################################################
+# Author: Jereelton Teixeira
+################################################################################
+
+ARG1="$1" #COMMAND
+ARG2="$2" #APP IDENTIFICATION
+
+if [[ ! $ARG1 =~ ':' ]]; then
+    echo "ERROR: Invalid argument to handler APP: ${ARG1} !"
+    exit
+fi
+
+if ! echo "${ARG2}" | egrep '^[A-Z][a-z]+[A-Z][a-z]+$' >> /dev/null 2>&1
+then
+    echo "ERROR: Invalid argument to create APP: ${ARG2}, use: AppName !"
+    exit
+fi
+
+GET_CMD=$(echo "$ARG1" | cut -d ":" -f1)
+GET_APP_FOLDER="./app/source"
+GET_APP_NAME="$ARG2"
+
+echo ""
+echo "Executing: ${GET_CMD}"
+echo ""
+
+if [[ ! -e "./app/source/${GET_APP_NAME}.php" && ! -e "./app/source/${GET_APP_NAME}.lock" ]]; then
+    echo "ERROR: APP not found: ${GET_APP_FOLDER} !"
+    exit
+fi
+
+if [[ $GET_CMD == 'delete' ]]; then
+    #Delete APP
+    CMD="Delete"
+
+    echo "Delete APP ${GET_APP_NAME} ?"
+    read -n1 OP
+
+    if [[ -e "./app/source/${GET_APP_NAME}.php" ]];
+    then
+        rm -rfv "./app/source/${GET_APP_NAME}.php"
+    fi
+
+    if [[ -e "./app/source/${GET_APP_NAME}.lock" ]];
+    then
+        rm -rfv "./app/source/${GET_APP_NAME}.lock"
+    fi
+
+fi
+
+if [[ $GET_CMD == 'lock' ]]; then
+    #Lock APP
+    CMD="Lock"
+
+    echo "Lock APP ${GET_APP_NAME} ?"
+    read -n1 OP
+
+    mv -v "./app/source/${GET_APP_NAME}.php" "./app/source/${GET_APP_NAME}.lock"
+
+fi
+
+if [[ $GET_CMD == 'unlock' ]]; then
+    #Unlock APP
+    CMD="Unlock"
+
+    if [[ ! -e "./app/source/${GET_APP_NAME}.lock" ]];
+    then
+        echo "ERROR: The APP is not locked !"
+        exit
+    fi
+
+    echo "Unlock APP ${GET_APP_NAME} ?"
+    read -n1 OP
+
+    mv -v "./app/source/${GET_APP_NAME}.lock" "./app/source/${GET_APP_NAME}.php"
+
+fi
+
+if [[ -e "./app/source/${GET_APP_NAME}.php" || -e "./app/source/${GET_APP_NAME}.lock" ]]; then
+    echo "APP_FOLDER LIST:"
+    ls -l "./app/source/${GET_APP_NAME}"*
+fi
+
+echo ""
+echo "${CMD} APP is finished"
+echo ""
+
+exit

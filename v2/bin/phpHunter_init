@@ -1,0 +1,276 @@
+#!/bin/bash
+
+################################################################################
+# Author: Jereelton Teixeira
+################################################################################
+
+#----------------------------------------------------------------------------------------
+
+function initMainDir {
+
+    ERROR=1
+
+    while [[ $ERROR == 1 ]]; do
+
+        echo "What is the main path of this project (/resources/{MAIN_PATH}/content)? "
+        read MAIN_DIR
+        echo ""
+
+        if [[ ${MAIN_DIR} == '.env' ]]; then
+            if [[ ! -e ${MAIN_DIR} ]];
+            then
+                ERROR=1
+                echo "ERROR: Env file ${MAIN_DIR} not Found, please provide the correct name of dotenv file !"
+                continue
+            fi
+            MAIN_DIR=$(grep 'MAIN_DIR' "${ARG6}" | cut -d "=" -f2 | sed -r 's/"//g' | sed -r "s/'//g" | sed -r 's/ //g')
+            ERROR=0
+            break
+        fi
+
+        if [[ ${MAIN_DIR} == 'sample' ]]; then
+            if [[ ! -e "./bin/project/src/environment/env.txt" ]];
+            then
+                ERROR=1
+                echo "ERROR: Env file env.txt is missing !"
+                continue
+            fi
+            MAIN_DIR=$(grep 'MAIN_DIR' "./bin/project/src/environment/env.txt" | cut -d "=" -f2 | sed -r 's/"//g' | sed -r "s/'//g" | sed -r 's/ //g')
+            ERROR=0
+            break
+        fi
+
+        if [[ -e ./resources/${MAIN_DIR} ]]; then
+            ERROR=1
+            echo "ERROR: Directory ${MAIN_DIR} already exists in resources !"
+            continue
+        else
+            ERROR=0
+        fi
+
+    done
+
+}
+#----------------------------------------------------------------------------------------
+
+#Init framework
+
+initMainDir
+
+echo "Wait . . ."
+
+sleep 2
+
+#DIRECTORIES-----------------------------------------------------------------------------
+
+#API
+mkdir -p "./api"
+mkdir -p "./api/session"
+
+#APP
+mkdir -p "./app"
+mkdir -p "./app/model"
+mkdir -p "./app/view"
+mkdir -p "./app/controller"
+mkdir -p "./app/source"
+
+#RESOURCES
+mkdir -p "./resources"
+mkdir -p "./resources/css"
+mkdir -p "./resources/js"
+mkdir -p "./resources/engine"
+mkdir -p "./resources/images"
+mkdir -p "./resources/public"
+mkdir -p "./resources/maintenance"
+mkdir -p "./resources/shared"
+mkdir -p "./resources/shared/alerts"
+mkdir -p "./resources/data/access"
+mkdir -p "./resources/${MAIN_DIR}"
+mkdir -p "./resources/${MAIN_DIR}/content"
+mkdir -p "./resources/${MAIN_DIR}/content/site"
+mkdir -p "./resources/${MAIN_DIR}/content/site/sample"
+mkdir -p "./resources/${MAIN_DIR}/content/site/sample/en"
+mkdir -p "./resources/${MAIN_DIR}/content/site/sample/en"
+mkdir -p "./resources/${MAIN_DIR}/content/site/sample/pt-br"
+mkdir -p "./resources/${MAIN_DIR}/content/extensions"
+mkdir -p "./resources/${MAIN_DIR}/content/extensions/sample_extension"
+mkdir -p "./resources/${MAIN_DIR}/content/extensions/sample_extension/en"
+mkdir -p "./resources/${MAIN_DIR}/content/extensions/sample_extension/es"
+mkdir -p "./resources/${MAIN_DIR}/content/extensions/sample_extension/pt-br"
+mkdir -p "./resources/${MAIN_DIR}/content/database"
+mkdir -p "./resources/${MAIN_DIR}/content/database/extensions"
+mkdir -p "./resources/${MAIN_DIR}/content/database/extensions/en"
+mkdir -p "./resources/${MAIN_DIR}/content/database/extensions/es"
+mkdir -p "./resources/${MAIN_DIR}/content/database/extensions/pt-br"
+mkdir -p "./resources/${MAIN_DIR}/content/database/site"
+mkdir -p "./resources/${MAIN_DIR}/content/database/site/en"
+mkdir -p "./resources/${MAIN_DIR}/content/database/site/es"
+mkdir -p "./resources/${MAIN_DIR}/content/database/site/pt-br"
+
+#DOWNLOADS
+mkdir -p "./downloads"
+
+#NODE MODULES
+mkdir -p "./node_modules"
+
+#FILES------------------------------------------------------------------------------------
+
+#API
+if [[ ! -e "./api/index.php" ]]; then
+    cp -pv "./bin/project/src/api/index.php" "./api/index.php"
+fi
+
+if [[ ! -e "./api/session/index.php" ]]; then
+    cp -pv "./bin/project/src/api/session/index.php" "./api/session/index.php"
+fi
+
+#APP
+if [[ ! -e "./app/source/AppHandler.php" ]]; then
+    cp -pv "./bin/project/src/app/source/AppHandler.php" "./app/source/AppHandler.php"
+fi
+
+if [[ ! -e "./app/source/ContentHandler.php" ]]; then
+    cp -pv "./bin/project/src/app/source/ContentHandler.php" "./app/source/ContentHandler.php"
+fi
+
+if [[ ! -e "./app/source/MenuHandler.php" ]]; then
+    cp -pv "./bin/project/src/app/source/MenuHandler.php" "./app/source/MenuHandler.php"
+fi
+
+if [[ ! -e "./app/functions.php" ]]; then
+    cp -pv "./bin/project/src/app/functions.php" "./app/functions.php"
+fi
+
+#CONTENTS - CSS
+
+if [[ ! -e "./resources/css/styles-light.css" ]]; then
+    cp -pv "./bin/project/src/css/styles-light.css" "./resources/css/styles-light.css"
+fi
+
+if [[ ! -e "./resources/css/styles-night.css" ]]; then
+    cp -pv "./bin/project/src/css/styles-night.css" "./resources/css/styles-night.css"
+fi
+
+#CONTENTS - JS
+
+if [[ ! -e "./resources/js/js_app.js" ]]; then
+    cp -pv "./bin/project/src/js/js_app.js" "./resources/js/js_app.js"
+fi
+
+if [[ ! -e "./resources/js/js_app_shared.js" ]]; then
+    cp -pv "./bin/project/src/js/js_app_shared.js" "./resources/js/js_app_shared.js"
+fi
+
+#CONTENTS - ENGINE
+
+if [[ ! -e "./resources/engine/header.php" ]]; then
+    cp -pv "./bin/project/src/engine/header.js" "./resources/engine/header.php"
+fi
+
+if [[ ! -e "./resources/engine/menu.php" ]]; then
+    cp -pv "./bin/project/src/engine/menu.js" "./resources/engine/menu.php"
+fi
+
+if [[ ! -e "./resources/engine/content.php" ]]; then
+    cp -pv "./bin/project/src/engine/content.js" "./resources/engine/content.php"
+fi
+
+#CONTENTS - IMAGES
+
+cp -pv "./bin/project/src/images/"* "./resources/images/"
+
+#CONTENTS - INDEX PUBLIC
+
+if [[ ! -e "./resources/public/index.php" ]]; then
+    cp -pv "./bin/project/src/public/index.php" "./resources/public/index.php"
+fi
+
+#CONTENTS - INDEX MAINTENANCE
+
+if [[ ! -e "./resources/maintenance/index.php" ]]; then
+    cp -pv "./bin/project/src/maintenance/index.php" "./resources/maintenance/index.php"
+fi
+
+#CONTENTS - SHARED
+
+if [[ ! -e "./resources/shared/alerts/404.php" ]]; then
+    cp -pv "./bin/project/src/shared/alerts/404.php" "./resources/shared/alerts/404.php"
+fi
+
+if [[ ! -e "./resources/shared/alerts/build-in.php" ]]; then
+    cp -pv "./bin/project/src/shared/alerts/build-in.php" "./resources/shared/alerts/build-in.php"
+fi
+
+#CONTENTS - DATA ACCESS
+
+if [[ ! -e "./resources/data/access/views.txt" ]]; then
+    cp -pv "./bin/project/src/views/access/views.txt" "./resources/data/access/views.txt"
+fi
+
+#CONTENTS - RESOURCES/CONTENTS/ITEMS
+
+cp -prv "./bin/project/src/application/"* "./resources/${MAIN_DIR}/content/"
+
+#INDEX ROOT
+
+if [[ -e "./index.php" ]]; then
+    cp -pv "./index.php" "./index.php.bkp"
+fi
+cp -pv "./bin/project/src/root/index.php" "./index.php"
+
+
+#ENV
+
+if [[ -e "./.env" ]]; then
+    cp -pv "./.env" "./.env.bkp"
+fi
+cp -prv "./bin/project/src/environment/env.txt" "./.env"
+
+#HTACCESS
+
+if [[ -e "./.htaccess" ]]; then
+    cp -pv "./.htaccess" "./.htaccess.bkp"
+fi
+cp -pv "./bin/project/src/apache/htaccess.txt" "./.htaccess"
+
+#PACKAGE JSON NPM
+
+if [[ -e "./package-lock.json" ]]; then
+    cp -pv "./package-lock.json" "./package-lock.json.bkp"
+fi
+cp -pv "./bin/project/src/npm/package-lock.json" "./package-lock.json"
+
+#NPM INSTALL
+
+VERSION=$(grep '"version":' "./package-lock.json" | cut -d ":" -f2 | sed -r 's/[^0-9.]//g')
+
+echo ""
+echo "* You can install the jsHunter after this installation with a version that you needed*"
+echo "Install jsHunter (${VERSION}) from NPM [yes, no] ?"
+read RSP
+
+if [[ $RSP == 'yes' ]]; then
+
+    #NPM installed ?
+    CHECKIN1=$(dpkg -l | grep npm)
+    CHECKIN2=$(builtin type -P npm)
+    apt show npm >> /dev/null 2>&1
+    CHECKIN3=$?
+    if [[ $CHECKIN1 == "" && $CHECKIN2 == "" && $CHECKIN3 != "0" ]];
+    then
+        echo "Error: The NPM is not installed in your system !"
+        exit
+    fi
+
+    npm i jshunter
+
+else
+
+    echo ""
+    echo "OK, you can still use 'npm i jshunter' to install the library in this current application"
+    echo ""
+
+fi
+
+echo "phpHunter_init is finished"
+echo ""
